@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://braakh0divr7n"]
+
+[ext_resource type="Script" path="res://cell.gd" id="1_58y0b"]
+[ext_resource type="Texture2D" uid="uid://epxdi037rq5t" path="res://assets/Cell.png" id="2_tod60"]
+
+[node name="Cell" type="Node2D"]
+script = ExtResource("1_58y0b")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tod60")
+
+[node name="RightDoor" type="Marker2D" parent="."]
+position = Vector2(64, 0)
+
+[node name="BotDoor" type="Marker2D" parent="."]
+position = Vector2(0, 32)
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -34.0
+offset_top = -18.0
+offset_right = 34.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="gui_input" from="Control" to="." method="_on_control_gui_input"]
