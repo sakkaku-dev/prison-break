@@ -33,19 +33,25 @@ func _ready():
 			add_child(cell)
 			
 	var first_room = _create_cell(Vector2(-1, 0))
-	first_room.add_entity(Cell.Entity.Player)
 	var door = _add_door_to_cell(first_room, Vector2.RIGHT)
 	door.close()
 	move_child(door, 0)
 	add_child(first_room)
 	move_child(first_room, 0)
 
+	GameManager.player_coord = Vector2(-1, 0)
 	global_position -= grid_size * cell_distance / 2
 	
 	GameManager.cell_view_ready.connect(func():
 		GameManager.cell_clicked.emit(first_room)
+		_update_entity_states()
 	)
-	
+
+func _update_entity_states():
+	for c in get_children():
+		if c.has_method("update_entities"):
+			c.update_entities()
+
 func _create_cell(coord: Vector2):
 	var cell = cell_scene.instantiate() as Cell
 	cell.position = cell_distance * coord

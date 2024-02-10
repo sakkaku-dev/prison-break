@@ -1,12 +1,6 @@
 class_name Cell
 extends Node2D
 
-enum Entity {
-	Player,
-	Enemy,
-	Chest,
-}
-
 signal cell_clicked()
 
 @export var normal_color := Color.DARK_GRAY
@@ -24,11 +18,9 @@ signal cell_clicked()
 var doors = {}
 var coord: Vector2
 
-var entities = []
-
 func _ready():
 	unhighlight()
-	_update_entities()
+	update_entities()
 	for dir in door_positions.keys():
 		_position_door(dir)
 
@@ -57,13 +49,7 @@ func unhighlight():
 func highlight():
 	modulate = selected_color
 
-func add_entity(entity):
-	if entity in entities: return
-	
-	entities.append(entity)
-	_update_entities()
-
-func _update_entities():
-	player_icon.visible = Entity.Player in entities
-	enemy_icon.visible = Entity.Enemy in entities
-	chest_icon.visible = Entity.Chest in entities
+func update_entities():
+	player_icon.visible = GameManager.player_coord == coord
+	enemy_icon.visible = false
+	chest_icon.visible = false
