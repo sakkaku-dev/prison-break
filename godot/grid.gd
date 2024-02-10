@@ -33,6 +33,7 @@ func _ready():
 			add_child(cell)
 			
 	var first_room = _create_cell(Vector2(-1, 0))
+	first_room.add_entity(Cell.Entity.Player)
 	var door = _add_door_to_cell(first_room, Vector2.RIGHT)
 	door.close()
 	move_child(door, 0)
