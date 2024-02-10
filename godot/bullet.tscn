@@ -1,15 +1,56 @@
-[gd_scene load_steps=3 format=3 uid="uid://cd4y0vf7uhbm0"]
+[gd_scene load_steps=9 format=3 uid="uid://cd4y0vf7uhbm0"]
 
-[ext_resource type="Texture2D" uid="uid://bg81vi5fxroyl" path="res://icon.svg" id="1_ocif6"]
+[ext_resource type="Script" path="res://bullet.gd" id="1_2sje0"]
+[ext_resource type="Texture2D" uid="uid://cpnngnhfwhpd" path="res://assets/protected/Projectiles/projectiles x1.png" id="1_3fncw"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_41vy1"]
-size = Vector2(20, 6)
+[sub_resource type="CircleShape2D" id="CircleShape2D_dvi32"]
+radius = 5.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m1b2r"]
+atlas = ExtResource("1_3fncw")
+region = Rect2(0, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yslma"]
+atlas = ExtResource("1_3fncw")
+region = Rect2(32, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5td3a"]
+atlas = ExtResource("1_3fncw")
+region = Rect2(64, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5orh8"]
+atlas = ExtResource("1_3fncw")
+region = Rect2(96, 128, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wi7gm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m1b2r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yslma")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5td3a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5orh8")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
 
 [node name="Bullet" type="Area2D"]
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.125, 0.03125)
-texture = ExtResource("1_ocif6")
+collision_layer = 0
+collision_mask = 5
+monitorable = false
+script = ExtResource("1_2sje0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_41vy1")
+shape = SubResource("CircleShape2D_dvi32")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_wi7gm")
+frame_progress = 0.348425
