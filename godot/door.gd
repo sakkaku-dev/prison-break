@@ -3,6 +3,7 @@ extends StaticBody2D
 @onready var animated_sprite_2d = $AnimatedSprite2D
 @onready var collision_shape_2d = $CollisionShape2D
 @onready var highlight = $Highlight
+@onready var point_light_2d = $LightRoot/PointLight2D
 
 var is_opened = false
 var last_frame = 11
@@ -13,7 +14,7 @@ func _ready():
 		collision_shape_2d.disabled = animated_sprite_2d.frame >= last_frame
 	)
 
-func open(immediate = false):
+func open(immediate = true):
 	if is_opened: return
 	
 	if immediate:
@@ -22,8 +23,9 @@ func open(immediate = false):
 		animated_sprite_2d.play("open")
 	
 	is_opened = true
+	point_light_2d.enabled = true
 
-func close(immediate = false):
+func close(immediate = true):
 	if not is_opened: return
 	
 	if immediate:
@@ -32,3 +34,4 @@ func close(immediate = false):
 		animated_sprite_2d.play_backwards("open") # TODO: different animation/pacing
 		
 	is_opened = false
+	point_light_2d.enabled = false

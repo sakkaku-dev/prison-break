@@ -1,7 +1,8 @@
-[gd_scene load_steps=17 format=3 uid="uid://dfrnygr27546n"]
+[gd_scene load_steps=18 format=3 uid="uid://dfrnygr27546n"]
 
 [ext_resource type="Texture2D" uid="uid://dh2g64g8wvfu4" path="res://assets/protected/Props and Items/props and items x1.png" id="1_i6b0o"]
 [ext_resource type="Script" path="res://door.gd" id="1_saupg"]
+[ext_resource type="Texture2D" uid="uid://djadq16t0u5lh" path="res://assets/DoorLight.png" id="3_wecko"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o7f7k"]
 atlas = ExtResource("1_i6b0o")
@@ -102,6 +103,7 @@ size = Vector2(32, 16)
 script = ExtResource("1_saupg")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+light_mask = 0
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_4ov0x")
 animation = &"open"
@@ -117,3 +119,11 @@ texture = ExtResource("1_i6b0o")
 hframes = 24
 vframes = 22
 frame = 457
+
+[node name="LightRoot" type="Node2D" parent="."]
+position = Vector2(0, -13)
+
+[node name="PointLight2D" type="PointLight2D" parent="LightRoot"]
+position = Vector2(0, 48.5)
+blend_mode = 2
+texture = ExtResource("3_wecko")

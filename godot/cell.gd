@@ -3,6 +3,9 @@ extends Node2D
 
 signal cell_clicked()
 
+@export var normal_color := Color.GRAY
+@export var selected_color := Color.WHITE
+
 @onready var door_positions = {
 	Vector2.DOWN: $BotDoor,
 	Vector2.RIGHT: $RightDoor,
@@ -12,7 +15,7 @@ var doors = {}
 var coord: Vector2
 
 func _ready():
-	
+	unhighlight()
 	for dir in door_positions.keys():
 		_position_door(dir)
 
@@ -31,7 +34,12 @@ func get_door(dir: Vector2):
 		return doors[dir]
 	return null
 
-
 func _on_control_gui_input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		cell_clicked.emit()
+
+func unhighlight():
+	modulate = normal_color
+	
+func highlight():
+	modulate = selected_color

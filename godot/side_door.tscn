@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://c620or1i1dsgn"]
+[gd_scene load_steps=5 format=3 uid="uid://c620or1i1dsgn"]
 
 [ext_resource type="Script" path="res://side_door.gd" id="1_icrfo"]
 [ext_resource type="Texture2D" uid="uid://cw67wswyiyyuk" path="res://assets/SideDoor.png" id="1_s5hqr"]
+[ext_resource type="Texture2D" uid="uid://djadq16t0u5lh" path="res://assets/DoorLight.png" id="3_1c36n"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_luuaa"]
 size = Vector2(8, 32)
@@ -14,3 +15,11 @@ texture = ExtResource("1_s5hqr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_luuaa")
+
+[node name="LightRoot" type="Node2D" parent="."]
+rotation = 1.5708
+
+[node name="PointLight2D" type="PointLight2D" parent="LightRoot"]
+position = Vector2(-4.37114e-07, 39)
+blend_mode = 2
+texture = ExtResource("3_1c36n")
