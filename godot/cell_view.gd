@@ -22,9 +22,6 @@ var wall_tile_coord = {
 	Vector2.DOWN: Vector2i(5, 10),
 }
 
-var top_wall_atlas_coord = Vector2i(5, 0)
-var lef_wall_atlas_coord = Vector2i(5, 0)
-
 var current_cell: Cell
 
 func _ready():

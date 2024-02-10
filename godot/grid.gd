@@ -13,11 +13,8 @@ func _ready():
 	for y in grid_size.y:
 		grid_data.append([])
 		for x in grid_size.x:
-			var cell = cell_scene.instantiate() as Cell
 			var coord = Vector2(x, y)
-			cell.position = cell_distance * coord
-			cell.coord = coord
-			cell.cell_clicked.connect(func(): GameManager.cell_clicked.emit(cell))
+			var cell = _create_cell(coord)
 			grid_data[y].append(cell)
 			
 			if y > 0:
@@ -34,12 +31,26 @@ func _ready():
 			
 			_create_missing_doors(cell, coord)
 			add_child(cell)
+			
+	var first_room = _create_cell(Vector2(-1, 0))
+	var door = _add_door_to_cell(first_room, Vector2.RIGHT)
+	door.close()
+	move_child(door, 0)
+	add_child(first_room)
+	move_child(first_room, 0)
 
 	global_position -= grid_size * cell_distance / 2
 	
 	GameManager.cell_view_ready.connect(func():
-		GameManager.cell_clicked.emit(grid_data[0][0])
+		GameManager.cell_clicked.emit(first_room)
 	)
+	
+func _create_cell(coord: Vector2):
+	var cell = cell_scene.instantiate() as Cell
+	cell.position = cell_distance * coord
+	cell.coord = coord
+	cell.cell_clicked.connect(func(): GameManager.cell_clicked.emit(cell))
+	return cell
 
 func _create_missing_doors(cell: Cell, coord: Vector2):
 	var dirs =  []
@@ -54,7 +65,11 @@ func _create_missing_doors(cell: Cell, coord: Vector2):
 		dirs.append(Vector2.RIGHT)
 	
 	for dir in dirs:
-		if cell.get_door(dir): continue
-		var door = door_scene.instantiate()
-		cell.add_door(dir, door)
-		add_child(door)
+		_add_door_to_cell(cell, dir)
+
+func _add_door_to_cell(cell: Cell, dir: Vector2):
+	if cell.get_door(dir): return
+	var door = door_scene.instantiate()
+	cell.add_door(dir, door)
+	add_child(door)
+	return door

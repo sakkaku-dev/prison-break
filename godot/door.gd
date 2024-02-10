@@ -15,8 +15,6 @@ func _ready():
 	)
 
 func open(immediate = true):
-	if is_opened: return
-	
 	if immediate:
 		animated_sprite_2d.frame = last_frame
 	else:
@@ -26,8 +24,6 @@ func open(immediate = true):
 	point_light_2d.enabled = true
 
 func close(immediate = true):
-	if not is_opened: return
-	
 	if immediate:
 		animated_sprite_2d.frame = 0
 	else:
