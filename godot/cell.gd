@@ -8,6 +8,7 @@ signal cell_clicked()
 
 @export var player_icon: Control
 @export var enemy_icon: Control
+@export var enemy_icon_count: Label
 @export var chest_icon: Control
 @export var exit_icon: Control
 
@@ -53,8 +54,12 @@ func highlight():
 func update_entities():
 	player_icon.visible = GameManager.player_coord == coord
 	exit_icon.visible = GameManager.exit_coord == coord
-	enemy_icon.visible = false
 	chest_icon.visible = false
+	
+	var enemies = GameManager.get_enemy_count_at(coord)
+	enemy_icon.visible = enemies > 0
+	enemy_icon_count.visible = enemies > 1
+	enemy_icon_count.text = "%sx" % enemies
 
 func move_player_if_one_exit():
 	var open_dir = []

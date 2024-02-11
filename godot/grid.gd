@@ -5,7 +5,7 @@ extends Node2D
 @export var cell_distance := Vector2(160, 120)
 @export var grid_size := Vector2(5, 5)
 
-var grid_data: Array[Array] = []
+var grid_data: Dictionary = {}
 var first_room: Cell
 
 func _ready():
@@ -15,23 +15,22 @@ func _create_map():
 	for c in get_children():
 		remove_child(c)
 		
-	grid_data = []
+	grid_data = {}
 	
 	for y in grid_size.y:
-		grid_data.append([])
 		for x in grid_size.x:
 			var coord = Vector2(x, y)
 			var cell = _create_cell(coord)
-			grid_data[y].append(cell)
+			grid_data[coord]= cell
 			
 			if y > 0:
-				var above_cell = grid_data[y - 1][x]
+				var above_cell = grid_data[coord + Vector2.UP]
 				var above_door = above_cell.get_door(Vector2.DOWN)
 				if above_door:
 					cell.add_door(Vector2.UP, above_door)
 			
 			if x > 0:
-				var left_cell = grid_data[y][x - 1]
+				var left_cell = grid_data[coord + Vector2.LEFT]
 				var left_door = left_cell.get_door(Vector2.RIGHT)
 				if left_door:
 					cell.add_door(Vector2.LEFT, left_door)
@@ -45,11 +44,28 @@ func _create_map():
 	else:
 		GameManager.player_coord = Vector2.ZERO
 	
+	_spawn_enemies()
+	
 	GameManager.exit_coord = grid_size - Vector2(1, 1)
 	global_position -= grid_size * cell_distance / 2
 
+func _spawn_enemies():
+	var enemy_count = ceil(grid_size.x / 2)
+	
+	# Don't spawn too close to player
+	var exclude = [Vector2(0, 0), Vector2(0, 1), Vector2(1, 0), Vector2(1, 1)]
+	var available_coords = grid_data.keys().filter(func(x): return not x in exclude)
+	
+	for i in range(enemy_count):
+		var coord = available_coords.pick_random()
+		available_coords.erase(coord)
+		GameManager.add_enemy(i, coord)
+	
+
 func _create_first_room():
-	first_room = _create_cell(Vector2(-1, 0))
+	var coord = Vector2(-1, 0)
+	first_room = _create_cell(coord)
+	grid_data[coord] = first_room
 	var door = _add_door_to_cell(first_room, Vector2.RIGHT)
 	door.close()
 	move_child(door, 0)
@@ -57,16 +73,12 @@ func _create_first_room():
 	move_child(first_room, 0)
 
 func get_first_room():
-	return first_room if first_room != null else grid_data[0][0]
+	return first_room if first_room != null else grid_data[Vector2.ZERO]
 
 func get_room(coord: Vector2):
-	if coord.y >= 0 and coord.y < grid_data.size():
-		if coord.x == -1:
-			return first_room
-		
-		if coord.x >= 0 and coord.y < grid_data[coord.y].size():
-			return grid_data[coord.y][coord.x]
-
+	if coord in grid_data:
+		return grid_data[coord]
+	
 	return null
 
 func update_entity_states():
