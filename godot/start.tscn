@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://b5fpb0ljp0w15"]
+[gd_scene load_steps=13 format=3 uid="uid://b5fpb0ljp0w15"]
 
 [ext_resource type="PackedScene" uid="uid://bjfaq61k27s5m" path="res://game.tscn" id="1_3j2fh"]
 [ext_resource type="PackedScene" uid="uid://bqlvmaw4ak4kf" path="res://cell_view.tscn" id="2_t12wy"]
@@ -9,7 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://cnrnunp6dgouw" path="res://assets/UI_NoGun.png" id="5_k3mpn"]
 [ext_resource type="Script" path="res://GUI.gd" id="8_qavpb"]
 [ext_resource type="Theme" uid="uid://drxp7a0nis7wq" path="res://theme.tres" id="9_ph2m3"]
-[ext_resource type="FontFile" uid="uid://dn1tj2dm7s54m" path="res://jackeyfont.ttf" id="10_g88c3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lh38g"]
 bg_color = Color(1, 1, 1, 1)
@@ -74,7 +73,6 @@ theme_override_constants/separation = 20
 
 [node name="Label" type="Label" parent="HBoxContainer/CenterContainer/ColorRect/CenterContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("10_g88c3")
 theme_override_font_sizes/font_size = 48
 text = "Signal Lost"
 

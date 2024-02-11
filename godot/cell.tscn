@@ -2,17 +2,15 @@
 
 [ext_resource type="Script" path="res://cell.gd" id="1_58y0b"]
 [ext_resource type="Texture2D" uid="uid://epxdi037rq5t" path="res://assets/Cell.png" id="2_tod60"]
+[ext_resource type="Theme" uid="uid://drxp7a0nis7wq" path="res://theme.tres" id="3_n1acc"]
 [ext_resource type="Texture2D" uid="uid://doy3rq4jf5e3v" path="res://assets/Icon_Chest.png" id="3_qu1l1"]
 [ext_resource type="Texture2D" uid="uid://dbrb3n1xgadht" path="res://assets/Icon_Player.png" id="3_vqs0b"]
 [ext_resource type="Texture2D" uid="uid://y2gyqxfi6gtl" path="res://assets/Icon_Enemy.png" id="4_y6031"]
-[ext_resource type="FontFile" uid="uid://dn1tj2dm7s54m" path="res://jackeyfont.ttf" id="5_jjvmd"]
 [ext_resource type="Texture2D" uid="uid://bvmi3lc5vfk5h" path="res://assets/Icon_Exit.png" id="6_indsn"]
 [ext_resource type="Texture2D" uid="uid://dxi7hv73jd1hj" path="res://assets/Icon_Fight.png" id="8_gcn5t"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_px73q"]
-font = ExtResource("5_jjvmd")
-font_size = 24
-outline_size = 4
+outline_size = 6
 outline_color = Color(0, 0, 0, 1)
 
 [node name="Cell" type="Node2D" node_paths=PackedStringArray("player_icon", "enemy_icon", "enemy_icon_count", "chest_icon", "exit_icon", "fight_icon")]
@@ -46,6 +44,7 @@ offset_right = 70.0
 offset_bottom = 37.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("3_n1acc")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control"]
 layout_mode = 2
