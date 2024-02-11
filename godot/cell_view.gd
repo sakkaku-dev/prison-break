@@ -1,5 +1,9 @@
 extends Node2D
 
+@onready var chest = $Chest
+@onready var enemies = $Enemies
+@onready var player = $Player
+
 @onready var tile_map = $TileMap
 @onready var door_node = {
 	Vector2.UP: $Top,
@@ -21,7 +25,6 @@ var wall_tile_coord = {
 	Vector2.LEFT: Vector2i(1, 2),
 	Vector2.DOWN: Vector2i(5, 10),
 }
-
 var current_cell: Cell
 
 func _ready():
@@ -41,6 +44,12 @@ func set_cell(cell: Cell):
 	
 	current_cell = cell
 	current_cell.highlight()
+	
+	player.visible = current_cell.has_player()
+	chest.visible = current_cell.has_chest()
+	var enemy_count = current_cell.get_enemy_count()
+	for i in enemies.get_child_count():
+		enemies.get_child(i).visible = i < enemy_count
 	
 	for dir in door_node.keys():
 		var cell_door = cell.get_door(dir)

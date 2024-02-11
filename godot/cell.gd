@@ -53,18 +53,27 @@ func highlight():
 	modulate = selected_color
 
 func update_entities():
-	player_icon.visible = GameManager.player_coord == coord
+	player_icon.visible = has_player()
 	exit_icon.visible = GameManager.exit_coord == coord
 	
-	chest_icon.visible = coord in GameManager.loot_coords
+	chest_icon.visible = has_chest()
 	chest_icon.modulate = Color.WHITE
 	
-	var enemies = GameManager.get_enemy_count_at(coord)
+	var enemies = get_enemy_count()
 	enemy_icon.visible = enemies > 0
 	enemy_icon_count.visible = enemies > 1
 	enemy_icon_count.text = "%sx" % enemies
 	
 	fight_icon.visible = enemies > 0 and player_icon.visible
+
+func has_chest():
+	return coord in GameManager.loot_coords
+
+func get_enemy_count():
+	return GameManager.get_enemy_count_at(coord)
+
+func has_player():
+	return GameManager.player_coord == coord
 
 func fight():
 	pass # TODO: some visuals
