@@ -9,6 +9,12 @@ var grid_data: Array[Array] = []
 var first_room: Cell
 
 func _ready():
+	_create_map()
+
+func _create_map():
+	for c in get_children():
+		remove_child(c)
+		
 	grid_data = []
 	
 	for y in grid_size.y:
@@ -32,7 +38,17 @@ func _ready():
 			
 			_create_missing_doors(cell, coord)
 			add_child(cell)
-			
+	
+	if GameManager.level <= 0:
+		_create_first_room()
+		GameManager.player_coord = Vector2(-1, 0)
+	else:
+		GameManager.player_coord = Vector2.ZERO
+	
+	GameManager.exit_coord = grid_size - Vector2(1, 1)
+	global_position -= grid_size * cell_distance / 2
+
+func _create_first_room():
 	first_room = _create_cell(Vector2(-1, 0))
 	var door = _add_door_to_cell(first_room, Vector2.RIGHT)
 	door.close()
@@ -40,23 +56,8 @@ func _ready():
 	add_child(first_room)
 	move_child(first_room, 0)
 
-	GameManager.player_coord = Vector2(-1, 0)
-	global_position -= grid_size * cell_distance / 2
-	
-	GameManager.cell_view_ready.connect(func():
-		GameManager.cell_clicked.emit(first_room)
-		_update_entity_states()
-	)
-	
-	GameManager.played_turn.connect(func():
-		var cell = get_room(GameManager.player_coord)
-		if cell:
-			cell.move_player_if_one_exit()
-		else:
-			print("Player room not found")
-		
-		_update_entity_states()
-	)
+func get_first_room():
+	return first_room if first_room != null else grid_data[0][0]
 
 func get_room(coord: Vector2):
 	if coord.y >= 0 and coord.y < grid_data.size():
@@ -68,7 +69,7 @@ func get_room(coord: Vector2):
 
 	return null
 
-func _update_entity_states():
+func update_entity_states():
 	for c in get_children():
 		if c.has_method("update_entities"):
 			c.update_entities()
@@ -77,7 +78,7 @@ func _create_cell(coord: Vector2):
 	var cell = cell_scene.instantiate() as Cell
 	cell.position = cell_distance * coord
 	cell.coord = coord
-	cell.cell_clicked.connect(func(): GameManager.cell_clicked.emit(cell))
+	cell.cell_clicked.connect(func(): GameManager.clicked_cell(cell))
 	return cell
 
 func _create_missing_doors(cell: Cell, coord: Vector2):

@@ -28,26 +28,6 @@ func _ready():
 	GameManager.cell_clicked.connect(set_cell)
 	GameManager.cell_view_ready.emit()
 
-func _unhandled_input(event: InputEvent):
-	var dir = _get_direction_for_input(event)
-	if dir and current_cell:
-		var door = current_cell.get_door(dir)
-		if door:
-			door.toggle()
-			GameManager.played_turn.emit()
-
-func _get_direction_for_input(event: InputEvent):
-	if event.is_action_pressed("move_down"):
-		return Vector2.DOWN
-	if event.is_action_pressed("move_up"):
-		return Vector2.UP
-	if event.is_action_pressed("move_left"):
-		return Vector2.LEFT
-	if event.is_action_pressed("move_right"):
-		return Vector2.RIGHT
-	
-	return Vector2.ZERO
-
 func set_cell(cell: Cell):
 	for dir in cell.doors:
 		var door = cell.get_door(dir) as CellDoor
