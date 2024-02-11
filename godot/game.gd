@@ -14,34 +14,39 @@ func _ready():
 	)
 
 	GameManager.reached_exit.connect(func(): get_tree().reload_current_scene())
-	
 	GameManager.played_turn.connect(func(): _process_turn())
 	GameManager.player_moved.connect(func():
 		var new_cell = grid.get_room(GameManager.player_coord) as Cell
 		GameManager.clicked_cell(new_cell)
-		if new_cell.get_player_move_dir():
-			turn_timer.start()
-		else:
-			player_turn = true
 	)
 	turn_timer.timeout.connect(func(): _process_turn())
 
 func _process_turn():
-	if GameManager.is_player_fighting():
+	if GameManager.is_player_at_loot():
+		GameManager.consume_loot()
+		GameManager.add_ammo(5)
+	elif GameManager.is_player_fighting():
 		if GameManager.ammo <= 0:
 			GameManager.hurt_player(1000) # game over
 		else:
 			pass # TODO: simulate fight
+		
+	elif GameManager.is_player_at_exit():
+		GameManager.exit_level()
+	else:
+		var player_moved = _check_move_player()
+		_move_enemies()
 	
-	var player_moved = _check_move_player()
-	_move_enemies()
 	grid.update_entity_states()
 	
-	var needs_another_process = GameManager.is_player_fighting()
-	if needs_another_process:
+	if _needs_processing():
 		turn_timer.start()
-	elif not player_moved:
+	else:
 		player_turn = true
+
+func _needs_processing():
+	var new_cell = grid.get_room(GameManager.player_coord) as Cell
+	return GameManager.is_player_at_loot() or GameManager.is_player_fighting() or GameManager.is_player_at_exit() or new_cell.get_player_move_dir()
 
 func _check_move_player():
 	var cell = grid.get_room(GameManager.player_coord)

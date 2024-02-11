@@ -55,7 +55,7 @@ func highlight():
 func update_entities():
 	player_icon.visible = GameManager.player_coord == coord
 	exit_icon.visible = GameManager.exit_coord == coord
-	chest_icon.visible = false
+	chest_icon.visible = coord in GameManager.loot_coords
 	
 	var enemies = GameManager.get_enemy_count_at(coord)
 	enemy_icon.visible = enemies > 0

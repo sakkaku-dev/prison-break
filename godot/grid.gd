@@ -38,13 +38,14 @@ func _create_map():
 			_create_missing_doors(cell, coord)
 			add_child(cell)
 	
-	if GameManager.level <= 0:
+	if GameManager.is_first_level():
 		_create_first_room()
 		GameManager.player_coord = Vector2(-1, 0)
 	else:
 		GameManager.player_coord = Vector2.ZERO
 	
 	_spawn_enemies()
+	_spawn_loot()
 	
 	GameManager.exit_coord = grid_size - Vector2(1, 1)
 	global_position -= grid_size * cell_distance / 2
@@ -53,14 +54,27 @@ func _spawn_enemies():
 	var enemy_count = ceil(grid_size.x / 2)
 	
 	# Don't spawn too close to player
-	var exclude = [Vector2(0, 0), Vector2(0, 1), Vector2(1, 0), Vector2(1, 1), Vector2(-1, 0)]
-	var available_coords = grid_data.keys().filter(func(x): return not x in exclude)
+	var available_coords = grid_data.keys().filter(func(c): return c.x > 2 and c.y > 2)
 	
 	for i in range(enemy_count):
 		var coord = available_coords.pick_random()
 		available_coords.erase(coord)
 		GameManager.add_enemy(i, coord)
+
+func _spawn_loot():
+	var loot_count = floor(grid_size.x / 2)
+	var available_coords = grid_data.keys()
 	
+	for i in range(loot_count):
+		var coord = available_coords.pick_random()
+		
+		if i == 0 and GameManager.is_first_level():
+			var close_coord = available_coords.filter(func(c): return c.x > 0 and c.y > 0 and c.x < 3 and c.y < 3)
+			coord = close_coord.pick_random()
+		
+		available_coords.erase(coord)
+		GameManager.add_loot(coord)
+
 
 func _create_first_room():
 	var coord = Vector2(-1, 0)
