@@ -3,6 +3,8 @@ extends Node2D
 @onready var turn_timer = $TurnTimer
 @onready var grid = $Grid
 
+var last_door := Vector2.ZERO
+
 var current_cell: Cell
 var player_turn = true
 
@@ -18,6 +20,7 @@ func _ready():
 	GameManager.player_moved.connect(func():
 		var new_cell = grid.get_room(GameManager.player_coord) as Cell
 		GameManager.clicked_cell(new_cell)
+		last_door = Vector2.ZERO
 	)
 	turn_timer.timeout.connect(func(): _process_turn())
 
@@ -49,13 +52,27 @@ func _needs_processing():
 	return GameManager.is_player_at_loot() or GameManager.is_player_fighting() or GameManager.is_player_at_exit() or new_cell.get_player_move_dir()
 
 func _check_move_player():
-	var cell = grid.get_room(GameManager.player_coord)
-	if cell:
-		return cell.move_player_if_one_exit()
-	else:
-		print("Player room not found")
+	var cell = grid.get_room(GameManager.player_coord) as Cell
+	
+	var move_dir = cell.get_player_move_dir()
+	if move_dir:
+		_remove_moved_door_mark()
+		cell.move_player(move_dir)
+		return true
+	
+	if last_door:
+		var changed_door = cell.get_door(last_door)
+		if changed_door and changed_door.is_open:
+			_remove_moved_door_mark()
+			cell.move_player(last_door)
+			return true
 
 	return false
+
+func _remove_moved_door_mark():
+	for c in grid.get_children():
+		if c.has_method("remove_move_mark"):
+			c.remove_move_mark()
 
 func _move_enemies():
 	for enemy in GameManager.enemies:
@@ -78,6 +95,14 @@ func _unhandled_input(event: InputEvent):
 			if door:
 				door.toggle()
 				player_turn = false
+				
+				if current_cell.coord == GameManager.player_coord:
+					last_door = dir
+				elif current_cell.coord + dir == GameManager.player_coord:
+					last_door = -dir
+				else:
+					last_door = Vector2.ZERO
+					
 				GameManager.played_turn.emit()
 
 func _get_direction_for_input(event: InputEvent):

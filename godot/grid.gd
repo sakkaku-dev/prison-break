@@ -8,7 +8,11 @@ extends Node2D
 var grid_data: Dictionary = {}
 var first_room: Cell
 
+const first_level_coord = Vector2(-1, 0)
+
 func _ready():
+	var size = min(grid_size.x + GameManager.level, 8)
+	grid_size = Vector2(size, size)
 	_create_map()
 
 func _create_map():
@@ -40,7 +44,7 @@ func _create_map():
 	
 	if GameManager.is_first_level():
 		_create_first_room()
-		GameManager.player_coord = Vector2(-1, 0)
+		GameManager.player_coord = first_level_coord
 	else:
 		GameManager.player_coord = Vector2.ZERO
 	
@@ -48,13 +52,13 @@ func _create_map():
 	_spawn_loot()
 	
 	GameManager.exit_coord = grid_size - Vector2(1, 1)
-	global_position -= grid_size * cell_distance / 2
+	global_position -= (grid_size-Vector2(1, 1)) * cell_distance / 2
 
 func _spawn_enemies():
 	var enemy_count = ceil(grid_size.x / 2)
 	
 	# Don't spawn too close to player
-	var available_coords = grid_data.keys().filter(func(c): return c.x > 2 and c.y > 2)
+	var available_coords = grid_data.keys().filter(func(c): return c.x > 2 or c.y > 2)
 	
 	for i in range(enemy_count):
 		var coord = available_coords.pick_random()
@@ -62,24 +66,33 @@ func _spawn_enemies():
 		GameManager.add_enemy(i, coord)
 
 func _spawn_loot():
-	var loot_count = floor(grid_size.x / 2)
-	var available_coords = grid_data.keys()
+	var loot_count = min(floor(grid_size.x / 2), 2)
 	
+	var close_coords = [Vector2(1, 0), Vector2(0, 1), Vector2(1, 1)]
+	var available_coords = grid_data.keys().filter(func(c): return c != Vector2.ZERO and c != first_level_coord)
+	
+	var first = null
 	for i in range(loot_count):
 		var coord = available_coords.pick_random()
 		
 		if i == 0 and GameManager.is_first_level():
-			var close_coord = available_coords.filter(func(c): return c.x > 0 and c.y > 0 and c.x < 3 and c.y < 3)
-			coord = close_coord.pick_random()
+			coord = close_coords.pick_random()
+		else:
+			while first != null and first.distance_to(coord) <= 3:
+				available_coords.erase(coord)
+				coord = available_coords.pick_random()
+				#print("%s - %s = %s " % [first, coord, first.distance_to(coord)])
+			
+		if first == null:
+			first = coord
 		
 		available_coords.erase(coord)
+		#print("Picked %s, removing from coords %s" % [coord, available_coords])
 		GameManager.add_loot(coord)
 
-
 func _create_first_room():
-	var coord = Vector2(-1, 0)
-	first_room = _create_cell(coord)
-	grid_data[coord] = first_room
+	first_room = _create_cell(first_level_coord)
+	grid_data[first_level_coord] = first_room
 	var door = _add_door_to_cell(first_room, Vector2.RIGHT)
 	door.close()
 	move_child(door, 0)

@@ -21,18 +21,30 @@ func open():
 	if is_open: return
 	
 	is_open = true
-	modulate = open_color
 	opened.emit()
+	_update_color()
 
 func close():
 	if not is_open: return
 	
 	is_open = false
-	modulate = close_color
+	has_moved = false
 	closed.emit()
 	
-	has_moved = false
+	_update_color()
 
 func move():
-	modulate = moved_color
 	has_moved = true
+	_update_color()
+
+func remove_move_mark():
+	has_moved = false
+	_update_color()
+
+func _update_color():
+	if has_moved:
+		modulate = moved_color
+	elif is_open:
+		modulate = open_color
+	else:
+		modulate = close_color

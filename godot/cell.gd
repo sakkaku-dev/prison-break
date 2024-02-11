@@ -63,14 +63,6 @@ func update_entities():
 	enemy_icon_count.text = "%sx" % enemies
 	
 	fight_icon.visible = player_icon.visible and enemies > 0
-
-func move_player_if_one_exit():
-	var dir = get_player_move_dir()
-	if dir:
-		_move_player(dir)
-		return true
-	
-	return false
 	
 func get_player_move_dir():
 	var open_dir = []
@@ -87,7 +79,7 @@ func get_player_move_dir():
 	
 	return Vector2.ZERO
 
-func _move_player(move_dir: Vector2):
+func move_player(move_dir: Vector2):
 	doors[move_dir].move()
 	GameManager.move_player(move_dir)
 
