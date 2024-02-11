@@ -14,20 +14,23 @@ func _ready():
 	)
 
 	GameManager.reached_exit.connect(func(): get_tree().reload_current_scene())
-	GameManager.player_moved.connect(func(): GameManager.clicked_cell(grid.get_room(GameManager.player_coord)))
-	GameManager.played_turn.connect(func(): _do_check())
-	turn_timer.timeout.connect(func(): _do_check())
-	
+	GameManager.played_turn.connect(func(): _process_turn())
+	GameManager.player_moved.connect(func():
+		var new_cell = grid.get_room(GameManager.player_coord) as Cell
+		GameManager.clicked_cell(new_cell)
+		if new_cell.get_player_move_dir():
+			turn_timer.start()
+		else:
+			player_turn = true
+	)
+	turn_timer.timeout.connect(func(): GameManager.played_turn.emit())
 
-func _do_check():
-	var changes = [_check_move_player()]
-	var has_changed = not changes.filter(func(x): return x).is_empty()
+func _process_turn():
+	var player_moved = _check_move_player()
+	_update_enemies()
 	
-	# keep updating until nothing to do anymore
-	if has_changed:
-		grid.update_entity_states()
-		turn_timer.start()
-	else:
+	grid.update_entity_states()
+	if not player_moved:
 		player_turn = true
 
 func _check_move_player():
@@ -38,6 +41,19 @@ func _check_move_player():
 		print("Player room not found")
 
 	return false
+
+func _update_enemies():
+	for enemy in GameManager.enemies:
+		var coord = GameManager.enemies[enemy]
+		if GameManager.is_in_alert():
+			pass
+		else:
+			var room = grid.get_room(coord)
+			if room:
+				var dirs = room.get_available_directions()
+				GameManager.move_enemy(enemy, dirs.pick_random())
+			else:
+				print("Enemy %s room not found" % enemy)
 
 func _unhandled_input(event: InputEvent):
 	if player_turn and current_cell:

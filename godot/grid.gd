@@ -53,7 +53,7 @@ func _spawn_enemies():
 	var enemy_count = ceil(grid_size.x / 2)
 	
 	# Don't spawn too close to player
-	var exclude = [Vector2(0, 0), Vector2(0, 1), Vector2(1, 0), Vector2(1, 1)]
+	var exclude = [Vector2(0, 0), Vector2(0, 1), Vector2(1, 0), Vector2(1, 1), Vector2(-1, 0)]
 	var available_coords = grid_data.keys().filter(func(x): return not x in exclude)
 	
 	for i in range(enemy_count):

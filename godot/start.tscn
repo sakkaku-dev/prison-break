@@ -1,7 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://b5fpb0ljp0w15"]
+[gd_scene load_steps=11 format=3 uid="uid://b5fpb0ljp0w15"]
 
 [ext_resource type="PackedScene" uid="uid://bjfaq61k27s5m" path="res://game.tscn" id="1_3j2fh"]
 [ext_resource type="PackedScene" uid="uid://bqlvmaw4ak4kf" path="res://cell_view.tscn" id="2_t12wy"]
+[ext_resource type="Script" path="res://HpBar.gd" id="3_8xigv"]
+[ext_resource type="Texture2D" uid="uid://cup6ddvpeapbb" path="res://assets/UI_Heart.png" id="3_q3oet"]
+[ext_resource type="Texture2D" uid="uid://foyt5qn01xei" path="res://assets/UI_Gun.png" id="4_7kq6x"]
+[ext_resource type="Script" path="res://GunBar.gd" id="4_hl47i"]
+[ext_resource type="Texture2D" uid="uid://cnrnunp6dgouw" path="res://assets/UI_NoGun.png" id="5_k3mpn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lh38g"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sanql"]
+bg_color = Color(0.694118, 0.243137, 0.32549, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pk1ur"]
+bg_color = Color(0.231373, 0.364706, 0.788235, 1)
 
 [node name="Start" type="Control"]
 layout_mode = 3
@@ -25,6 +39,7 @@ size_flags_horizontal = 3
 stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer"]
+disable_3d = true
 handle_input_locally = false
 size = Vector2i(1396, 1080)
 render_target_update_mode = 4
@@ -53,3 +68,79 @@ size = Vector2i(480, 288)
 render_target_update_mode = 4
 
 [node name="CellView" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_t12wy")]
+
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer" node_paths=PackedStringArray("progress_bar")]
+layout_mode = 2
+script = ExtResource("3_8xigv")
+progress_bar = NodePath("MarginContainer/ProgressBar")
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("3_q3oet")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ProgressBar" type="ProgressBar" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_lh38g")
+theme_override_styles/fill = SubResource("StyleBoxFlat_sanql")
+max_value = 5.0
+step = 1.0
+value = 2.0
+show_percentage = false
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer" node_paths=PackedStringArray("texture_rect", "progress_bar")]
+layout_mode = 2
+script = ExtResource("4_hl47i")
+empty_icon = ExtResource("5_k3mpn")
+fill_icon = ExtResource("4_7kq6x")
+texture_rect = NodePath("TextureRect")
+progress_bar = NodePath("MarginContainer2/ProgressBar")
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("4_7kq6x")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ProgressBar" type="ProgressBar" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer2/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_lh38g")
+theme_override_styles/fill = SubResource("StyleBoxFlat_pk1ur")
+max_value = 5.0
+step = 1.0
+show_percentage = false

@@ -11,6 +11,7 @@ signal cell_clicked()
 @export var enemy_icon_count: Label
 @export var chest_icon: Control
 @export var exit_icon: Control
+@export var fight_icon: Control
 
 @onready var door_positions = {
 	Vector2.DOWN: $BotDoor,
@@ -60,8 +61,18 @@ func update_entities():
 	enemy_icon.visible = enemies > 0
 	enemy_icon_count.visible = enemies > 1
 	enemy_icon_count.text = "%sx" % enemies
+	
+	fight_icon.visible = player_icon.visible and enemies > 0
 
 func move_player_if_one_exit():
+	var dir = get_player_move_dir()
+	if dir:
+		_move_player(dir)
+		return true
+	
+	return false
+	
+func get_player_move_dir():
 	var open_dir = []
 	var only_opened = []
 	for dir in doors:
@@ -72,11 +83,18 @@ func move_player_if_one_exit():
 				open_dir.append(dir)
 	
 	if open_dir.size() == 1:
-		_move_player(open_dir[0])
-		return true
+		return open_dir[0]
 	
-	return false
+	return Vector2.ZERO
 
 func _move_player(move_dir: Vector2):
 	doors[move_dir].move()
 	GameManager.move_player(move_dir)
+
+func get_available_directions():
+	var result = []
+	for k in doors.keys():
+		var door = doors[k]
+		if door.is_open:
+			result.append(k)
+	return result
