@@ -6,6 +6,7 @@ extends Node2D
 @export var grid_size := Vector2(5, 5)
 
 var grid_data: Array[Array] = []
+var first_room: Cell
 
 func _ready():
 	grid_data = []
@@ -32,7 +33,7 @@ func _ready():
 			_create_missing_doors(cell, coord)
 			add_child(cell)
 			
-	var first_room = _create_cell(Vector2(-1, 0))
+	first_room = _create_cell(Vector2(-1, 0))
 	var door = _add_door_to_cell(first_room, Vector2.RIGHT)
 	door.close()
 	move_child(door, 0)
@@ -46,6 +47,26 @@ func _ready():
 		GameManager.cell_clicked.emit(first_room)
 		_update_entity_states()
 	)
+	
+	GameManager.played_turn.connect(func():
+		var cell = get_room(GameManager.player_coord)
+		if cell:
+			cell.move_player_if_one_exit()
+		else:
+			print("Player room not found")
+		
+		_update_entity_states()
+	)
+
+func get_room(coord: Vector2):
+	if coord.y >= 0 and coord.y < grid_data.size():
+		if coord.x == -1:
+			return first_room
+		
+		if coord.x >= 0 and coord.y < grid_data[coord.y].size():
+			return grid_data[coord.y][coord.x]
+
+	return null
 
 func _update_entity_states():
 	for c in get_children():

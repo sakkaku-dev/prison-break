@@ -53,3 +53,15 @@ func update_entities():
 	player_icon.visible = GameManager.player_coord == coord
 	enemy_icon.visible = false
 	chest_icon.visible = false
+
+func move_player_if_one_exit():
+	var open_dir = []
+	for dir in doors:
+		var door = doors[dir]
+		if door.is_open and not door.has_moved:
+			open_dir.append(dir)
+	
+	if open_dir.size() == 1:
+		var move_dir = open_dir[0]
+		doors[move_dir].move()
+		GameManager.move_player(move_dir)

@@ -34,6 +34,7 @@ func _unhandled_input(event: InputEvent):
 		var door = current_cell.get_door(dir)
 		if door:
 			door.toggle()
+			GameManager.played_turn.emit()
 
 func _get_direction_for_input(event: InputEvent):
 	if event.is_action_pressed("move_down"):
