@@ -4,6 +4,7 @@ extends Node2D
 @onready var grid = $Grid
 
 var current_cell: Cell
+var player_turn = true
 
 func _ready():
 	GameManager.cell_clicked.connect(func(cell): current_cell = cell)
@@ -13,10 +14,7 @@ func _ready():
 	)
 
 	GameManager.reached_exit.connect(func(): get_tree().reload_current_scene())
-	GameManager.player_moved.connect(func():
-		GameManager.clicked_cell(grid.get_room(GameManager.player_coord))
-		grid.update_entity_states()
-	)
+	GameManager.player_moved.connect(func(): GameManager.clicked_cell(grid.get_room(GameManager.player_coord)))
 	GameManager.played_turn.connect(func(): _do_check())
 	turn_timer.timeout.connect(func(): _do_check())
 	
@@ -27,7 +25,10 @@ func _do_check():
 	
 	# keep updating until nothing to do anymore
 	if has_changed:
+		grid.update_entity_states()
 		turn_timer.start()
+	else:
+		player_turn = true
 
 func _check_move_player():
 	var cell = grid.get_room(GameManager.player_coord)
@@ -39,12 +40,14 @@ func _check_move_player():
 	return false
 
 func _unhandled_input(event: InputEvent):
-	var dir = _get_direction_for_input(event)
-	if dir and current_cell:
-		var door = current_cell.get_door(dir)
-		if door:
-			door.toggle()
-			GameManager.played_turn.emit()
+	if player_turn and current_cell:
+		var dir = _get_direction_for_input(event)
+		if dir:
+			var door = current_cell.get_door(dir)
+			if door:
+				door.toggle()
+				player_turn = false
+				GameManager.played_turn.emit()
 
 func _get_direction_for_input(event: InputEvent):
 	if event.is_action_pressed("move_down"):
