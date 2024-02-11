@@ -21,20 +21,25 @@ func _create_map():
 		
 	grid_data = {}
 	
+	if GameManager.is_first_level():
+		_create_first_room()
+	
 	for y in grid_size.y:
 		for x in grid_size.x:
 			var coord = Vector2(x, y)
 			var cell = _create_cell(coord)
 			grid_data[coord]= cell
 			
-			if y > 0:
-				var above_cell = grid_data[coord + Vector2.UP]
+			var up_dir = coord + Vector2.UP
+			if up_dir in grid_data:
+				var above_cell = grid_data[up_dir]
 				var above_door = above_cell.get_door(Vector2.DOWN)
 				if above_door:
 					cell.add_door(Vector2.UP, above_door)
 			
-			if x > 0:
-				var left_cell = grid_data[coord + Vector2.LEFT]
+			var left_dir = coord + Vector2.LEFT
+			if left_dir in grid_data:
+				var left_cell = grid_data[left_dir]
 				var left_door = left_cell.get_door(Vector2.RIGHT)
 				if left_door:
 					cell.add_door(Vector2.LEFT, left_door)
@@ -43,7 +48,6 @@ func _create_map():
 			add_child(cell)
 	
 	if GameManager.is_first_level():
-		_create_first_room()
 		GameManager.player_coord = first_level_coord
 	else:
 		GameManager.player_coord = Vector2.ZERO
@@ -53,6 +57,43 @@ func _create_map():
 	
 	GameManager.exit_coord = grid_size - Vector2(1, 1)
 	global_position -= (grid_size-Vector2(1, 1)) * cell_distance / 2
+
+func _create_first_room():
+	first_room = _create_cell(first_level_coord)
+	grid_data[first_level_coord] = first_room
+	var door = _add_door_to_cell(first_room, Vector2.RIGHT)
+	door.close()
+	add_child(first_room)
+
+func _create_cell(coord: Vector2):
+	var cell = cell_scene.instantiate() as Cell
+	cell.position = cell_distance * coord
+	cell.coord = coord
+	cell.cell_clicked.connect(func(): GameManager.clicked_cell(cell))
+	return cell
+
+func _create_missing_doors(cell: Cell, coord: Vector2):
+	var dirs =  []
+
+	if coord.y > 0:
+		dirs.append(Vector2.UP)
+	if coord.x > 0:
+		dirs.append(Vector2.LEFT)
+	if coord.y < grid_size.y - 1:
+		dirs.append(Vector2.DOWN)
+	if coord.x < grid_size.x - 1:
+		dirs.append(Vector2.RIGHT)
+	
+	for dir in dirs:
+		_add_door_to_cell(cell, dir)
+
+func _add_door_to_cell(cell: Cell, dir: Vector2):
+	if cell.get_door(dir): return
+	var door = door_scene.instantiate()
+	cell.add_door(dir, door)
+	add_child(door)
+	return door
+
 
 func _spawn_enemies():
 	var enemy_count = ceil(grid_size.x / 2)
@@ -90,15 +131,6 @@ func _spawn_loot():
 		#print("Picked %s, removing from coords %s" % [coord, available_coords])
 		GameManager.add_loot(coord)
 
-func _create_first_room():
-	first_room = _create_cell(first_level_coord)
-	grid_data[first_level_coord] = first_room
-	var door = _add_door_to_cell(first_room, Vector2.RIGHT)
-	door.close()
-	move_child(door, 0)
-	add_child(first_room)
-	move_child(first_room, 0)
-
 func get_first_room():
 	return first_room if first_room != null else grid_data[Vector2.ZERO]
 
@@ -112,32 +144,3 @@ func update_entity_states():
 	for c in get_children():
 		if c.has_method("update_entities"):
 			c.update_entities()
-
-func _create_cell(coord: Vector2):
-	var cell = cell_scene.instantiate() as Cell
-	cell.position = cell_distance * coord
-	cell.coord = coord
-	cell.cell_clicked.connect(func(): GameManager.clicked_cell(cell))
-	return cell
-
-func _create_missing_doors(cell: Cell, coord: Vector2):
-	var dirs =  []
-
-	if coord.y > 0:
-		dirs.append(Vector2.UP)
-	if coord.x > 0:
-		dirs.append(Vector2.LEFT)
-	if coord.y < grid_size.y - 1:
-		dirs.append(Vector2.DOWN)
-	if coord.x < grid_size.x - 1:
-		dirs.append(Vector2.RIGHT)
-	
-	for dir in dirs:
-		_add_door_to_cell(cell, dir)
-
-func _add_door_to_cell(cell: Cell, dir: Vector2):
-	if cell.get_door(dir): return
-	var door = door_scene.instantiate()
-	cell.add_door(dir, door)
-	add_child(door)
-	return door

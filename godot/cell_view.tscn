@@ -164,7 +164,7 @@ scale = Vector2(-1, 1)
 position = Vector2(0, -9)
 sprite_frames = SubResource("SpriteFrames_rogu4")
 autoplay = "default"
-frame_progress = 0.661788
+frame_progress = 0.39514
 
 [node name="AnimatedSprite2D3" type="AnimatedSprite2D" parent="Enemies"]
 position = Vector2(-24, 6)
