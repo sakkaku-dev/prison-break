@@ -55,15 +55,26 @@ func highlight():
 func update_entities():
 	player_icon.visible = GameManager.player_coord == coord
 	exit_icon.visible = GameManager.exit_coord == coord
+	
 	chest_icon.visible = coord in GameManager.loot_coords
+	chest_icon.modulate = Color.WHITE
 	
 	var enemies = GameManager.get_enemy_count_at(coord)
 	enemy_icon.visible = enemies > 0
 	enemy_icon_count.visible = enemies > 1
 	enemy_icon_count.text = "%sx" % enemies
 	
-	fight_icon.visible = player_icon.visible and enemies > 0
-	
+	fight_icon.visible = enemies > 0 and player_icon.visible
+
+func fight():
+	pass # TODO: some visuals
+
+func picked_up_loot():
+	GameManager.consume_loot(coord)
+	var tw = create_tween() # TODO: doesnt work?
+	tw.tween_property(chest_icon, "global_position", chest_icon.global_position + Vector2.UP * 5, 0.5)
+	tw.tween_property(chest_icon, "modulate", Color.TRANSPARENT, 0.5)
+
 func get_player_move_dir():
 	var open_dir = []
 	var only_opened = []

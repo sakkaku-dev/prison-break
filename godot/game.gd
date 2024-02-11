@@ -26,13 +26,16 @@ func _ready():
 
 func _process_turn():
 	if GameManager.is_player_at_loot():
-		GameManager.consume_loot()
-		GameManager.add_ammo(5)
+		_get_player_room().picked_up_loot()
+		GameManager.ammo += 10
+		
 	elif GameManager.is_player_fighting():
+		_get_player_room().fight()
+		
 		if GameManager.ammo <= 0:
-			GameManager.hurt_player(1000) # game over
+			GameManager.player_health -= 1000 # game over
 		else:
-			pass # TODO: simulate fight
+			GameManager.player_fight()
 		
 	elif GameManager.is_player_at_exit():
 		GameManager.exit_level()
@@ -46,6 +49,9 @@ func _process_turn():
 		turn_timer.start()
 	else:
 		player_turn = true
+
+func _get_player_room():
+	return grid.get_room(GameManager.player_coord) as Cell
 
 func _needs_processing():
 	var new_cell = grid.get_room(GameManager.player_coord) as Cell
@@ -76,7 +82,7 @@ func _remove_moved_door_mark():
 
 func _move_enemies():
 	for enemy in GameManager.enemies:
-		var coord = GameManager.enemies[enemy]
+		var coord = GameManager.enemies[enemy].coord
 		if GameManager.is_in_alert():
 			pass
 		elif not GameManager.is_enemy_fighting(enemy):

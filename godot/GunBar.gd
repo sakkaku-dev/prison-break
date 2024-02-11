@@ -7,6 +7,8 @@ extends HBoxContainer
 @export var progress_bar: ProgressBar
 
 func _ready():
+	progress_bar.max_value = GameManager.MAX_AMMO
+	
 	_update()
 	GameManager.ammo_changed.connect(_update)
 

@@ -3,7 +3,7 @@ extends HBoxContainer
 @export var progress_bar: ProgressBar
 
 func _ready():
-	progress_bar.max_value = GameManager.player_health
+	progress_bar.max_value = GameManager.MAX_HEALTH
 	progress_bar.value = GameManager.player_health
 	
 	_update()
