@@ -1,14 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bjfaq61k27s5m"]
-
-[ext_resource type="Script" path="res://grid.gd" id="1_2e8ha"]
-[ext_resource type="Script" path="res://game.gd" id="1_tadav"]
-[ext_resource type="PackedScene" uid="uid://braakh0divr7n" path="res://cell.tscn" id="2_eaw8w"]
-[ext_resource type="PackedScene" uid="uid://078uumkr2bia" path="res://cell_door.tscn" id="3_garh4"]
-[ext_resource type="Theme" uid="uid://drxp7a0nis7wq" path="res://theme.tres" id="5_8444p"]
-[ext_resource type="Script" path="res://GUI.gd" id="6_uwgxs"]
-
-[sub_resource type="Shader" id="Shader_0eaqb"]
-code = "/*
+/*
 Shader from Godot Shaders - the free shader library.
 godotshaders.com/shader/VHS-and-CRT-monitor-effect
 
@@ -24,8 +14,8 @@ shader_type canvas_item;
 // - If you are using this shader as an overlay, and want the shader to affect the nodes below in the Scene hierarchy,
 //   set 'overlay' to true (checked in the inspector).
 // On Mac there is potentially a bug causing this to not work properly. If that is the case and you want to use the shader as an overlay
-// change all \"overlay ? SCREEN_TEXTURE : TEXTURE\" to only \"SCREEN_TEXTURE\" on lines 129-140, and \"vec2 uv = overlay ? warp(SCREEN_UV) : warp(UV);\"
-// to \"vec2 uv = warp(SCREEN_UV);\" on line 98.
+// change all "overlay ? SCREEN_TEXTURE : TEXTURE" to only "SCREEN_TEXTURE" on lines 129-140, and "vec2 uv = overlay ? warp(SCREEN_UV) : warp(UV);"
+// to "vec2 uv = warp(SCREEN_UV);" on line 98.
 uniform bool overlay = false;
 
 uniform float scanlines_opacity : hint_range(0.0, 1.0) = 0.4;
@@ -33,7 +23,7 @@ uniform float scanlines_width : hint_range(0.0, 0.5) = 0.25;
 uniform float grille_opacity : hint_range(0.0, 1.0) = 0.3;
 uniform vec2 resolution = vec2(640.0, 480.0); // Set the number of rows and columns the texture will be divided in. Scanlines and grille will make a square based on these values
 
-uniform bool pixelate = true; // Fill each square (\"pixel\") with a sampled color, creating a pixel look and a more accurate representation of how a CRT monitor would work.
+uniform bool pixelate = true; // Fill each square ("pixel") with a sampled color, creating a pixel look and a more accurate representation of how a CRT monitor would work.
 
 uniform bool roll = true;
 uniform float roll_speed = 8.0; // Positive values are down, negative are up
@@ -199,7 +189,7 @@ void fragment()
 		// We use roll_line (set above) to define how big the noise should be vertically (multiplying cuts off all black parts).
 		// We also add in some basic noise with random() to break up the noise pattern above. The noise is sized according to 
 		// the resolution value set in the inspector. If you don't like this look you can 
-		// change \"ceil(uv * resolution) / resolution\" to only \"uv\" to make it less pixelated. Or multiply resolution with som value
+		// change "ceil(uv * resolution) / resolution" to only "uv" to make it less pixelated. Or multiply resolution with som value
 		// greater than 1.0 to make them smaller.
 		roll_line *= noise * scanlines * clamp(random((ceil(uv * resolution) / resolution) + vec2(TIME * 0.8, 0.0)).x + 0.8, 0.0, 1.0);
 		// Add it to the texture based on noise_opacity
@@ -238,87 +228,4 @@ void fragment()
 	}
 	
 	COLOR = text;
-}"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_27dv3"]
-shader = SubResource("Shader_0eaqb")
-shader_parameter/overlay = false
-shader_parameter/scanlines_opacity = 0.4
-shader_parameter/scanlines_width = 0.25
-shader_parameter/grille_opacity = 0.3
-shader_parameter/resolution = Vector2(480, 288)
-shader_parameter/pixelate = false
-shader_parameter/roll = false
-shader_parameter/roll_speed = 8.0
-shader_parameter/roll_size = 15.0
-shader_parameter/roll_variation = 1.8
-shader_parameter/distort_intensity = 0.05
-shader_parameter/noise_opacity = 0.1
-shader_parameter/noise_speed = 10.0
-shader_parameter/static_noise_intensity = 0.1
-shader_parameter/aberration = 4.75e-08
-shader_parameter/brightness = 1.4
-shader_parameter/discolor = true
-shader_parameter/warp_amount = 0.5
-shader_parameter/clip_warp = false
-shader_parameter/vignette_intensity = 0.4
-shader_parameter/vignette_opacity = 0.5
-
-[node name="Game" type="Node2D"]
-script = ExtResource("1_tadav")
-
-[node name="Grid" type="Node2D" parent="."]
-script = ExtResource("1_2e8ha")
-cell_scene = ExtResource("2_eaw8w")
-door_scene = ExtResource("3_garh4")
-
-[node name="Camera2D" type="Camera2D" parent="."]
-
-[node name="TurnTimer" type="Timer" parent="."]
-one_shot = true
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="ColorRect2" type="ColorRect" parent="CanvasLayer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("5_8444p")
-color = Color(0, 0, 0, 0.690196)
-script = ExtResource("6_uwgxs")
-
-[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/ColorRect2"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("5_8444p")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/ColorRect2/CenterContainer"]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="Label" type="Label" parent="CanvasLayer/ColorRect2/CenterContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 48
-text = "Signal Lost"
-
-[node name="Button" type="Button" parent="CanvasLayer/ColorRect2/CenterContainer/VBoxContainer"]
-process_mode = 3
-layout_mode = 2
-text = "Reconnect"
-
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
-material = SubResource("ShaderMaterial_27dv3")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[connection signal="pressed" from="CanvasLayer/ColorRect2/CenterContainer/VBoxContainer/Button" to="CanvasLayer/ColorRect2" method="_on_button_pressed"]
+}

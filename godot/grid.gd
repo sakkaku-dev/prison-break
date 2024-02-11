@@ -2,7 +2,7 @@ extends Node2D
 
 @export var cell_scene: PackedScene
 @export var door_scene: PackedScene
-@export var cell_distance := Vector2(160, 120)
+@export var cell_distance := Vector2(180, 120)
 @export var grid_size := Vector2(5, 5)
 
 var grid_data: Dictionary = {}
@@ -11,7 +11,7 @@ var first_room: Cell
 const first_level_coord = Vector2(-1, 0)
 
 func _ready():
-	var size = min(grid_size.x + GameManager.level, 8)
+	var size = min(grid_size.x + GameManager.level, 7)
 	grid_size = Vector2(size, size)
 	_create_map()
 

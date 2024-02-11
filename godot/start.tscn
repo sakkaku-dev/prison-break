@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b5fpb0ljp0w15"]
+[gd_scene load_steps=12 format=3 uid="uid://b5fpb0ljp0w15"]
 
 [ext_resource type="PackedScene" uid="uid://bjfaq61k27s5m" path="res://game.tscn" id="1_3j2fh"]
 [ext_resource type="PackedScene" uid="uid://bqlvmaw4ak4kf" path="res://cell_view.tscn" id="2_t12wy"]
@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://foyt5qn01xei" path="res://assets/UI_Gun.png" id="4_7kq6x"]
 [ext_resource type="Script" path="res://GunBar.gd" id="4_hl47i"]
 [ext_resource type="Texture2D" uid="uid://cnrnunp6dgouw" path="res://assets/UI_NoGun.png" id="5_k3mpn"]
-[ext_resource type="Script" path="res://GUI.gd" id="8_qavpb"]
 [ext_resource type="Theme" uid="uid://drxp7a0nis7wq" path="res://theme.tres" id="9_ph2m3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lh38g"]
@@ -53,10 +52,10 @@ render_target_update_mode = 4
 [node name="Game" parent="HBoxContainer/CenterContainer/SubViewportContainer/SubViewport" instance=ExtResource("1_3j2fh")]
 
 [node name="ColorRect" type="ColorRect" parent="HBoxContainer/CenterContainer"]
+visible = false
 layout_mode = 2
 theme = ExtResource("9_ph2m3")
 color = Color(0, 0, 0, 0.690196)
-script = ExtResource("8_qavpb")
 
 [node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/CenterContainer/ColorRect"]
 layout_mode = 1
