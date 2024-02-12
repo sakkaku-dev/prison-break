@@ -26,17 +26,15 @@ func _ready():
 
 func _process_turn():
 	if GameManager.is_player_at_loot():
-		_get_player_room().picked_up_loot()
 		GameManager.ammo += 10
-		
+		await _get_player_room().picked_up_loot(10)
 	elif GameManager.is_player_fighting():
-		_get_player_room().fight()
+		await _get_player_room().fight()
 		
 		if GameManager.ammo <= 0:
 			GameManager.player_health -= 1000 # game over
 		else:
 			GameManager.player_fight()
-		
 	elif GameManager.is_player_at_exit():
 		GameManager.exit_level()
 	else:

@@ -4,6 +4,7 @@ extends Node2D
 @onready var enemies = $Enemies
 @onready var player = $Player
 @onready var open_chest = $OpenChest
+@onready var elevator = $Elevator
 
 @onready var tile_map = $TileMap
 @onready var door_node = {
@@ -59,9 +60,11 @@ func set_cell(cell: Cell):
 			_remove_door(dir)
 
 func _update_visuals():
+	elevator.visible = current_cell.has_exit()
 	player.visible = current_cell.has_player()
 	chest.visible = current_cell.has_chest()
 	open_chest.visible = current_cell.has_open_chest()
+	
 	var enemy_count = current_cell.get_enemy_count()
 	for i in enemies.get_child_count():
 		enemies.get_child(i).visible = i < enemy_count

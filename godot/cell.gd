@@ -15,6 +15,7 @@ signal cell_clicked()
 
 @export var fight_icon: Control
 @export var looted_icon: Control
+@export var looted_text: Label
 
 @onready var door_positions = {
 	Vector2.DOWN: $BotDoor,
@@ -60,7 +61,7 @@ func highlight():
 
 func update_entities():
 	player_icon.visible = has_player()
-	exit_icon.visible = GameManager.exit_coord == coord
+	exit_icon.visible = has_exit()
 	
 	chest_icon.visible = has_chest()
 	open_chest_icon.visible = has_open_chest()
@@ -82,20 +83,24 @@ func get_enemy_count():
 func has_player():
 	return GameManager.player_coord == coord
 
+func has_exit():
+	return GameManager.exit_coord == coord
+
 func fight():
-	_tween_show_icon(fight_icon)
+	await _tween_show_icon(fight_icon)
 	
 func _tween_show_icon(icon: Control):
-	icon.global_position = global_position - icon.size / 2 + Vector2.UP * 20
-	var tw = create_tween().set_parallel()
+	icon.global_position = global_position - icon.size / 2 + Vector2.UP * 10
+	var tw = create_tween().set_parallel().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 	tw.tween_property(icon, "modulate", Color.WHITE, 0.5)
 	tw.tween_property(icon, "modulate", Color.TRANSPARENT, 0.5).set_delay(0.5)
-	tw.tween_property(icon, "global_position", icon.global_position + Vector2.UP * 40, 1.0)
+	tw.tween_property(icon, "global_position", icon.global_position + Vector2.UP * 20, 1.0)
+	await tw.finished
 
-
-func picked_up_loot():
+func picked_up_loot(amount: int):
 	GameManager.consume_loot(coord)
-	_tween_show_icon(looted_icon)
+	await _tween_show_icon(looted_icon)
+	looted_text.text = str(amount)
 
 func get_player_move_dir():
 	var open_dir = []

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bqlvmaw4ak4kf"]
+[gd_scene load_steps=26 format=3 uid="uid://bqlvmaw4ak4kf"]
 
 [ext_resource type="TileSet" uid="uid://ds1lbs5kcdgty" path="res://tilemap.tres" id="1_c1qak"]
 [ext_resource type="Script" path="res://cell_view.gd" id="1_k826v"]
@@ -7,9 +7,11 @@
 [ext_resource type="Shader" path="res://crt.gdshader" id="5_hpelx"]
 [ext_resource type="Script" path="res://ViewCanvas.gd" id="5_ox0jk"]
 [ext_resource type="Texture2D" uid="uid://sf13junvf35i" path="res://assets/Live.png" id="6_bokh0"]
+[ext_resource type="Theme" uid="uid://drxp7a0nis7wq" path="res://theme.tres" id="6_nxhp7"]
 [ext_resource type="Texture2D" uid="uid://dh2g64g8wvfu4" path="res://assets/protected/Props and Items/props and items x1.png" id="7_bomtk"]
 [ext_resource type="Texture2D" uid="uid://ryswfpbabfhv" path="res://assets/protected/Enemies/enemies x1.png" id="8_qxc5v"]
 [ext_resource type="Texture2D" uid="uid://5lay8ulo2y53" path="res://assets/protected/Players/players blue x1.png" id="9_6d0l3"]
+[ext_resource type="Texture2D" uid="uid://csvbm4obgpbsu" path="res://assets/Elevator.png" id="12_kgudm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_npgvf"]
 shader = ExtResource("5_hpelx")
@@ -177,19 +179,34 @@ script = ExtResource("5_ox0jk")
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
 offset_right = 56.0
 offset_bottom = 20.0
+theme = ExtResource("6_nxhp7")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MarginContainer/HBoxContainer"]
+layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MarginContainer/HBoxContainer/MarginContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 texture = ExtResource("6_bokh0")
 expand_mode = 3
-stretch_mode = 5
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="CanvasLayer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.627451, 0.219608, 0.294118, 1)
+theme_override_font_sizes/font_size = 14
+text = "Live"
 
 [node name="BlackScreen" type="ColorRect" parent="CanvasLayer"]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -266,6 +283,10 @@ position = Vector2(-42, -21)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
 sprite_frames = SubResource("SpriteFrames_g3vap")
+
+[node name="Elevator" type="Sprite2D" parent="."]
+position = Vector2(176, -35)
+texture = ExtResource("12_kgudm")
 
 [editable path="Bot"]
 [editable path="Left"]
