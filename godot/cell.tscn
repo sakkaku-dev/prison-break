@@ -14,12 +14,13 @@
 outline_size = 6
 outline_color = Color(0, 0, 0, 1)
 
-[node name="Cell" type="Node2D" node_paths=PackedStringArray("player_icon", "enemy_icon", "enemy_icon_count", "chest_icon", "exit_icon", "fight_icon", "looted_icon")]
+[node name="Cell" type="Node2D" node_paths=PackedStringArray("player_icon", "enemy_icon", "enemy_icon_count", "chest_icon", "open_chest_icon", "exit_icon", "fight_icon", "looted_icon")]
 script = ExtResource("1_58y0b")
 player_icon = NodePath("Control/HBoxContainer/Player")
 enemy_icon = NodePath("Control/HBoxContainer/Enemy")
 enemy_icon_count = NodePath("Control/HBoxContainer/Enemy/MarginContainer/Label")
 chest_icon = NodePath("Control/HBoxContainer/Chest")
+open_chest_icon = NodePath("Control/HBoxContainer/OpenChest")
 exit_icon = NodePath("Control/HBoxContainer/Exit")
 fight_icon = NodePath("Control/MarginContainer")
 looted_icon = NodePath("Control/MarginContainer2")
@@ -96,6 +97,13 @@ horizontal_alignment = 1
 vertical_alignment = 2
 
 [node name="Chest" type="TextureRect" parent="Control/HBoxContainer"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+texture = ExtResource("3_qu1l1")
+expand_mode = 4
+stretch_mode = 5
+
+[node name="OpenChest" type="TextureRect" parent="Control/HBoxContainer"]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 texture = ExtResource("3_qu1l1")

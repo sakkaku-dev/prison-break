@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bqlvmaw4ak4kf"]
+[gd_scene load_steps=24 format=3 uid="uid://bqlvmaw4ak4kf"]
 
 [ext_resource type="TileSet" uid="uid://ds1lbs5kcdgty" path="res://tilemap.tres" id="1_c1qak"]
 [ext_resource type="Script" path="res://cell_view.gd" id="1_k826v"]
@@ -34,6 +34,54 @@ shader_parameter/warp_amount = 0.0
 shader_parameter/clip_warp = false
 shader_parameter/vignette_intensity = 0.26
 shader_parameter/vignette_opacity = 0.5
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j4ive"]
+atlas = ExtResource("7_bomtk")
+region = Rect2(352, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u3pqx"]
+atlas = ExtResource("7_bomtk")
+region = Rect2(352, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o2a3a"]
+atlas = ExtResource("7_bomtk")
+region = Rect2(416, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t0cww"]
+atlas = ExtResource("7_bomtk")
+region = Rect2(448, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ok2h"]
+atlas = ExtResource("7_bomtk")
+region = Rect2(384, 192, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rhevd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j4ive")
+}],
+"loop": false,
+"name": &"closed",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u3pqx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o2a3a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t0cww")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ok2h")
+}],
+"loop": false,
+"name": &"open",
+"speed": 5.0
+}]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fjm6b"]
 atlas = ExtResource("8_qxc5v")
@@ -167,14 +215,11 @@ hframes = 24
 vframes = 22
 frame = 156
 
-[node name="Chest" type="Node2D" parent="."]
+[node name="Chest" type="AnimatedSprite2D" parent="."]
 position = Vector2(17, -55)
-
-[node name="Sprite2D" type="Sprite2D" parent="Chest"]
-texture = ExtResource("7_bomtk")
-hframes = 24
-vframes = 22
-frame = 155
+sprite_frames = SubResource("SpriteFrames_rhevd")
+animation = &"closed"
+autoplay = "closed"
 
 [node name="Enemies" type="Node2D" parent="."]
 position = Vector2(78, -26)

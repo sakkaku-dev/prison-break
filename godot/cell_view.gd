@@ -29,7 +29,7 @@ var wall_tile_coord = {
 var current_cell: Cell
 
 func _ready():
-	GameManager.looted_chest.connect(_update_visuals)
+	GameManager.looted_chest.connect(func(): chest.play("open"))
 	GameManager.killed_enemy.connect(_update_visuals)
 	
 	GameManager.cell_clicked.connect(set_cell)

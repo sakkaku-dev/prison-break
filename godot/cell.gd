@@ -10,6 +10,7 @@ signal cell_clicked()
 @export var enemy_icon: Control
 @export var enemy_icon_count: Label
 @export var chest_icon: Control
+@export var open_chest_icon: Control
 @export var exit_icon: Control
 
 @export var fight_icon: Control
@@ -62,7 +63,7 @@ func update_entities():
 	exit_icon.visible = GameManager.exit_coord == coord
 	
 	chest_icon.visible = has_chest()
-	chest_icon.modulate = Color.WHITE
+	open_chest_icon.visible = has_open_chest()
 	
 	var enemies = get_enemy_count()
 	enemy_icon.visible = enemies > 0
