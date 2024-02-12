@@ -8,6 +8,7 @@ signal player_moved()
 signal reached_exit()
 signal player_died()
 
+signal medkit_pickedup()
 signal looted_chest()
 signal killed_enemy()
 
@@ -24,10 +25,12 @@ const ENEMY_DAMAGE = 1
 var exit_coord := Vector2.ZERO
 var player_coord := Vector2.ZERO
 var loot_coords := []
+var looted_coords := []
+var medkit_coords := []
+var opened_medkits := []
 var enemies := {}
 var enemy_alert_state = false
 
-var looted_coords := []
 
 var player_health := MAX_HEALTH:
 	set(v):
@@ -74,6 +77,9 @@ func clicked_cell(cell: Cell):
 func add_loot(coord: Vector2):
 	loot_coords.append(coord)
 
+func add_medkit(coord: Vector2):
+	medkit_coords.append(coord)
+
 func move_enemy(id: int, dir: Vector2):
 	enemies[id].coord = enemies[id].coord + dir
 
@@ -88,11 +94,19 @@ func is_in_alert(): # TODO: change enemy state
 
 func is_player_at_loot():
 	return player_coord in loot_coords
+
+func is_player_at_medkit():
+	return player_coord in medkit_coords
 	
 func consume_loot(coord):
 	loot_coords.erase(coord)
 	looted_coords.append(coord)
 	looted_chest.emit()
+
+func pickup_medkit(coord):
+	medkit_coords.erase(coord)
+	opened_medkits.append(coord)
+	medkit_pickedup.emit()
 
 func player_fight():
 	var enemies_by_player = _enemies_at(player_coord)

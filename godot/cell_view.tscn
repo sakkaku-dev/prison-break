@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bqlvmaw4ak4kf"]
+[gd_scene load_steps=34 format=3 uid="uid://bqlvmaw4ak4kf"]
 
 [ext_resource type="TileSet" uid="uid://ds1lbs5kcdgty" path="res://tilemap.tres" id="1_c1qak"]
 [ext_resource type="Script" path="res://cell_view.gd" id="1_k826v"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://ryswfpbabfhv" path="res://assets/protected/Enemies/enemies x1.png" id="8_qxc5v"]
 [ext_resource type="Texture2D" uid="uid://5lay8ulo2y53" path="res://assets/protected/Players/players blue x1.png" id="9_6d0l3"]
 [ext_resource type="Texture2D" uid="uid://csvbm4obgpbsu" path="res://assets/Elevator.png" id="12_kgudm"]
+[ext_resource type="Texture2D" uid="uid://dcad2q5pn6rru" path="res://assets/Medkit.png" id="13_3e3kl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_npgvf"]
 shader = ExtResource("5_hpelx")
@@ -126,6 +127,66 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ynjy"]
+atlas = ExtResource("13_3e3kl")
+region = Rect2(0, 0, 14, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ujbe"]
+atlas = ExtResource("13_3e3kl")
+region = Rect2(0, 0, 14, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1yhv4"]
+atlas = ExtResource("13_3e3kl")
+region = Rect2(14, 0, 14, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_18htm"]
+atlas = ExtResource("13_3e3kl")
+region = Rect2(28, 0, 14, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x7gvj"]
+atlas = ExtResource("13_3e3kl")
+region = Rect2(42, 0, 14, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q7i4t"]
+atlas = ExtResource("13_3e3kl")
+region = Rect2(42, 0, 14, 15)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_csfi3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ynjy")
+}],
+"loop": false,
+"name": &"close",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ujbe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1yhv4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_18htm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x7gvj")
+}],
+"loop": false,
+"name": &"open",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q7i4t")
+}],
+"loop": true,
+"name": &"opened",
 "speed": 5.0
 }]
 
@@ -287,6 +348,12 @@ sprite_frames = SubResource("SpriteFrames_g3vap")
 [node name="Elevator" type="Sprite2D" parent="."]
 position = Vector2(176, -35)
 texture = ExtResource("12_kgudm")
+
+[node name="Medkit" type="AnimatedSprite2D" parent="."]
+position = Vector2(-16, -44)
+sprite_frames = SubResource("SpriteFrames_csfi3")
+animation = &"open"
+autoplay = "close"
 
 [editable path="Bot"]
 [editable path="Left"]

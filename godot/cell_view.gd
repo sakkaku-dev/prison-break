@@ -5,6 +5,7 @@ extends Node2D
 @onready var player = $Player
 @onready var open_chest = $OpenChest
 @onready var elevator = $Elevator
+@onready var medkit = $Medkit
 
 @onready var tile_map = $TileMap
 @onready var door_node = {
@@ -30,6 +31,7 @@ var wall_tile_coord = {
 var current_cell: Cell
 
 func _ready():
+	GameManager.medkit_pickedup.connect(func(): medkit.play("open"))
 	GameManager.looted_chest.connect(func(): chest.play("open"))
 	GameManager.killed_enemy.connect(_update_visuals)
 	
@@ -60,9 +62,17 @@ func set_cell(cell: Cell):
 			_remove_door(dir)
 
 func _update_visuals():
+	medkit.visible = current_cell.has_medkit() or current_cell.has_open_medkit()
+	if current_cell.has_open_medkit():
+		medkit.play("opened")
+	elif current_cell.has_medkit():
+		medkit.play("close")
+	
 	elevator.visible = current_cell.has_exit()
 	player.visible = current_cell.has_player()
+	
 	chest.visible = current_cell.has_chest()
+	chest.play("closed")
 	open_chest.visible = current_cell.has_open_chest()
 	
 	var enemy_count = current_cell.get_enemy_count()

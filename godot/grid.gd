@@ -55,6 +55,7 @@ func _create_map():
 	
 	_spawn_enemies()
 	_spawn_loot()
+	_spawn_medkit() # dependent on loot positions
 	
 	GameManager.exit_coord = grid_size - Vector2(1, 1)
 	global_position -= (grid_size-Vector2(1, 1)) * cell_distance / 2
@@ -131,6 +132,17 @@ func _spawn_loot():
 		available_coords.erase(coord)
 		#print("Picked %s, removing from coords %s" % [coord, available_coords])
 		GameManager.add_loot(coord)
+
+func _spawn_medkit():
+	if GameManager.is_first_level(): return
+	
+	var medkit_count = 1
+	
+	var available_coords = grid_data.keys().filter(func(c): return c != Vector2.ZERO and c != first_level_coord and not c in GameManager.loot_coords)
+	for i in range(medkit_count):
+		var coord = available_coords.pick_random()
+		available_coords.erase(coord)
+		GameManager.add_medkit(coord)
 
 func get_first_room():
 	return first_room if first_room != null else grid_data[Vector2.ZERO]

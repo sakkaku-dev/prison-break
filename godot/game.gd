@@ -28,6 +28,9 @@ func _process_turn():
 	if GameManager.is_player_at_loot():
 		GameManager.ammo += 10
 		await _get_player_room().picked_up_loot(10)
+	elif GameManager.is_player_at_medkit():
+		GameManager.player_health += 2
+		await _get_player_room().pickup_medkit()
 	elif GameManager.is_player_fighting():
 		await _get_player_room().fight()
 		
@@ -53,7 +56,7 @@ func _get_player_room():
 
 func _needs_processing():
 	var new_cell = grid.get_room(GameManager.player_coord) as Cell
-	return GameManager.is_player_at_loot() or GameManager.is_player_fighting() or GameManager.is_player_at_exit() or new_cell.get_player_move_dir()
+	return GameManager.is_player_at_loot() or GameManager.is_player_fighting() or GameManager.is_player_at_exit() or new_cell.get_player_move_dir() or GameManager.is_player_at_medkit()
 
 func _check_move_player():
 	var cell = grid.get_room(GameManager.player_coord) as Cell

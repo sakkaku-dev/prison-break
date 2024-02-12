@@ -11,8 +11,11 @@ signal cell_clicked()
 @export var enemy_icon_count: Label
 @export var chest_icon: Control
 @export var open_chest_icon: Control
+@export var medkit_icon: Control
+@export var open_medkit_icon: Control
 @export var exit_icon: Control
 
+@export var health_icon: Control
 @export var fight_icon: Control
 @export var looted_icon: Control
 @export var looted_text: Label
@@ -28,6 +31,7 @@ var coord: Vector2
 func _ready():
 	fight_icon.modulate = Color.TRANSPARENT
 	looted_icon.modulate = Color.TRANSPARENT
+	health_icon.modulate = Color.TRANSPARENT
 	
 	unhighlight()
 	update_entities()
@@ -62,6 +66,8 @@ func highlight():
 func update_entities():
 	player_icon.visible = has_player()
 	exit_icon.visible = has_exit()
+	medkit_icon.visible = has_medkit()
+	open_medkit_icon.visible = has_open_medkit()
 	
 	chest_icon.visible = has_chest()
 	open_chest_icon.visible = has_open_chest()
@@ -76,6 +82,12 @@ func has_chest():
 
 func has_open_chest():
 	return coord in GameManager.looted_coords
+
+func has_medkit():
+	return coord in GameManager.medkit_coords
+	
+func has_open_medkit():
+	return coord in GameManager.opened_medkits
 
 func get_enemy_count():
 	return GameManager.get_enemy_count_at(coord)
@@ -99,8 +111,14 @@ func _tween_show_icon(icon: Control):
 
 func picked_up_loot(amount: int):
 	GameManager.consume_loot(coord)
+	update_entities()
 	await _tween_show_icon(looted_icon)
 	looted_text.text = str(amount)
+
+func pickup_medkit():
+	GameManager.pickup_medkit(coord)
+	update_entities()
+	await _tween_show_icon(health_icon)
 
 func get_player_move_dir():
 	var open_dir = []
