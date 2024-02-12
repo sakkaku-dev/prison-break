@@ -21,6 +21,8 @@ func _create_map():
 		
 	grid_data = {}
 	GameManager.looted_coords = []
+	GameManager.opened_medkits = []
+	GameManager.medkit_coords = []
 	
 	if GameManager.is_first_level():
 		_create_first_room()
