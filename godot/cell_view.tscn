@@ -1,10 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://bqlvmaw4ak4kf"]
+[gd_scene load_steps=18 format=3 uid="uid://bqlvmaw4ak4kf"]
 
 [ext_resource type="TileSet" uid="uid://ds1lbs5kcdgty" path="res://tilemap.tres" id="1_c1qak"]
 [ext_resource type="Script" path="res://cell_view.gd" id="1_k826v"]
 [ext_resource type="PackedScene" uid="uid://dfrnygr27546n" path="res://door.tscn" id="2_afxal"]
 [ext_resource type="PackedScene" uid="uid://c620or1i1dsgn" path="res://side_door.tscn" id="3_f2wlx"]
 [ext_resource type="Shader" path="res://crt.gdshader" id="5_hpelx"]
+[ext_resource type="Script" path="res://ViewCanvas.gd" id="5_ox0jk"]
 [ext_resource type="Texture2D" uid="uid://sf13junvf35i" path="res://assets/Live.png" id="6_bokh0"]
 [ext_resource type="Texture2D" uid="uid://dh2g64g8wvfu4" path="res://assets/protected/Props and Items/props and items x1.png" id="7_bomtk"]
 [ext_resource type="Texture2D" uid="uid://ryswfpbabfhv" path="res://assets/protected/Enemies/enemies x1.png" id="8_qxc5v"]
@@ -17,16 +18,16 @@ shader_parameter/scanlines_opacity = 0.058
 shader_parameter/scanlines_width = 0.029
 shader_parameter/grille_opacity = 0.099
 shader_parameter/resolution = Vector2(480, 288)
-shader_parameter/pixelate = true
-shader_parameter/roll = true
-shader_parameter/roll_speed = 0.0
-shader_parameter/roll_size = 0.0
-shader_parameter/roll_variation = 1.579
+shader_parameter/pixelate = false
+shader_parameter/roll = false
+shader_parameter/roll_speed = 2.0
+shader_parameter/roll_size = 15.0
+shader_parameter/roll_variation = 1.8
 shader_parameter/distort_intensity = 0.05
-shader_parameter/noise_opacity = 0.121
+shader_parameter/noise_opacity = 0.0
 shader_parameter/noise_speed = 4.895
-shader_parameter/static_noise_intensity = 0.06
-shader_parameter/aberration = 0.03
+shader_parameter/static_noise_intensity = 0.132
+shader_parameter/aberration = 4.75e-08
 shader_parameter/brightness = 1.4
 shader_parameter/discolor = true
 shader_parameter/warp_amount = 0.0
@@ -122,19 +123,12 @@ position = Vector2(252, -16)
 color = Color(0.733333, 0.733333, 0.733333, 1)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-visible = false
-
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
-material = SubResource("ShaderMaterial_npgvf")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+process_mode = 3
+script = ExtResource("5_ox0jk")
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
-offset_right = 46.0
-offset_bottom = 10.0
+offset_right = 56.0
+offset_bottom = 20.0
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
@@ -146,6 +140,22 @@ layout_mode = 2
 texture = ExtResource("6_bokh0")
 expand_mode = 3
 stretch_mode = 5
+
+[node name="BlackScreen" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_npgvf")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Chest" type="Node2D" parent="."]
 position = Vector2(17, -55)

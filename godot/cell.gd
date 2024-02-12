@@ -11,7 +11,9 @@ signal cell_clicked()
 @export var enemy_icon_count: Label
 @export var chest_icon: Control
 @export var exit_icon: Control
+
 @export var fight_icon: Control
+@export var looted_icon: Control
 
 @onready var door_positions = {
 	Vector2.DOWN: $BotDoor,
@@ -22,6 +24,9 @@ var doors = {}
 var coord: Vector2
 
 func _ready():
+	fight_icon.modulate = Color.TRANSPARENT
+	looted_icon.modulate = Color.TRANSPARENT
+	
 	unhighlight()
 	update_entities()
 	for dir in door_positions.keys():
@@ -63,8 +68,6 @@ func update_entities():
 	enemy_icon.visible = enemies > 0
 	enemy_icon_count.visible = enemies > 1
 	enemy_icon_count.text = "%sx" % enemies
-	
-	fight_icon.visible = enemies > 0 and player_icon.visible
 
 func has_chest():
 	return coord in GameManager.loot_coords
@@ -76,13 +79,19 @@ func has_player():
 	return GameManager.player_coord == coord
 
 func fight():
-	pass # TODO: some visuals
+	_tween_show_icon(fight_icon)
+	
+func _tween_show_icon(icon: Control):
+	icon.global_position = global_position - icon.size / 2 + Vector2.UP * 20
+	var tw = create_tween().set_parallel()
+	tw.tween_property(icon, "modulate", Color.WHITE, 0.5)
+	tw.tween_property(icon, "modulate", Color.TRANSPARENT, 0.5).set_delay(0.5)
+	tw.tween_property(icon, "global_position", icon.global_position + Vector2.UP * 40, 1.0)
+
 
 func picked_up_loot():
 	GameManager.consume_loot(coord)
-	var tw = create_tween() # TODO: doesnt work?
-	tw.tween_property(chest_icon, "global_position", chest_icon.global_position + Vector2.UP * 5, 0.5)
-	tw.tween_property(chest_icon, "modulate", Color.TRANSPARENT, 0.5)
+	_tween_show_icon(looted_icon)
 
 func get_player_move_dir():
 	var open_dir = []

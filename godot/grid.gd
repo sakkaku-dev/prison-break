@@ -20,6 +20,7 @@ func _create_map():
 		remove_child(c)
 		
 	grid_data = {}
+	GameManager.looted_coords = []
 	
 	if GameManager.is_first_level():
 		_create_first_room()

@@ -8,6 +8,9 @@ signal player_moved()
 signal reached_exit()
 signal player_died()
 
+signal looted_chest(coord)
+signal killed_enemy(coord)
+
 signal ammo_changed()
 signal health_changed()
 
@@ -23,6 +26,8 @@ var player_coord := Vector2.ZERO
 var loot_coords := []
 var enemies := {}
 var enemy_alert_state = false
+
+var looted_coords := []
 
 var player_health := MAX_HEALTH:
 	set(v):
@@ -86,6 +91,8 @@ func is_player_at_loot():
 	
 func consume_loot(coord):
 	loot_coords.erase(coord)
+	looted_coords.append(coord)
+	looted_chest.emit(coord)
 
 func player_fight():
 	var enemies_by_player = _enemies_at(player_coord)
@@ -98,6 +105,7 @@ func player_fight():
 	
 	if first_enemy.health <= 0:
 		enemies.erase(enemy_id)
+		killed_enemy.emit(player_coord)
 	else:
 		self.player_health -= ENEMY_DAMAGE
 	
