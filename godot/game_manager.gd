@@ -8,8 +8,8 @@ signal player_moved()
 signal reached_exit()
 signal player_died()
 
-signal looted_chest(coord)
-signal killed_enemy(coord)
+signal looted_chest()
+signal killed_enemy()
 
 signal ammo_changed()
 signal health_changed()
@@ -92,7 +92,7 @@ func is_player_at_loot():
 func consume_loot(coord):
 	loot_coords.erase(coord)
 	looted_coords.append(coord)
-	looted_chest.emit(coord)
+	looted_chest.emit()
 
 func player_fight():
 	var enemies_by_player = _enemies_at(player_coord)
@@ -105,7 +105,7 @@ func player_fight():
 	
 	if first_enemy.health <= 0:
 		enemies.erase(enemy_id)
-		killed_enemy.emit(player_coord)
+		killed_enemy.emit()
 	else:
 		self.player_health -= ENEMY_DAMAGE
 	

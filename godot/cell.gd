@@ -72,6 +72,9 @@ func update_entities():
 func has_chest():
 	return coord in GameManager.loot_coords
 
+func has_open_chest():
+	return coord in GameManager.looted_coords
+
 func get_enemy_count():
 	return GameManager.get_enemy_count_at(coord)
 

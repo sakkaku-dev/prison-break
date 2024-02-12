@@ -150,12 +150,22 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+visible = false
 material = SubResource("ShaderMaterial_npgvf")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="OpenChest" type="Node2D" parent="."]
+position = Vector2(17, -55)
+
+[node name="Sprite2D2" type="Sprite2D" parent="OpenChest"]
+texture = ExtResource("7_bomtk")
+hframes = 24
+vframes = 22
+frame = 156
 
 [node name="Chest" type="Node2D" parent="."]
 position = Vector2(17, -55)

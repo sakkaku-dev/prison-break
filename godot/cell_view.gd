@@ -3,6 +3,7 @@ extends Node2D
 @onready var chest = $Chest
 @onready var enemies = $Enemies
 @onready var player = $Player
+@onready var open_chest = $OpenChest
 
 @onready var tile_map = $TileMap
 @onready var door_node = {
@@ -28,6 +29,9 @@ var wall_tile_coord = {
 var current_cell: Cell
 
 func _ready():
+	GameManager.looted_chest.connect(_update_visuals)
+	GameManager.killed_enemy.connect(_update_visuals)
+	
 	GameManager.cell_clicked.connect(set_cell)
 	GameManager.cell_view_ready.emit()
 
@@ -45,11 +49,7 @@ func set_cell(cell: Cell):
 	current_cell = cell
 	current_cell.highlight()
 	
-	player.visible = current_cell.has_player()
-	chest.visible = current_cell.has_chest()
-	var enemy_count = current_cell.get_enemy_count()
-	for i in enemies.get_child_count():
-		enemies.get_child(i).visible = i < enemy_count
+	_update_visuals()
 	
 	for dir in door_node.keys():
 		var cell_door = cell.get_door(dir)
@@ -58,6 +58,14 @@ func set_cell(cell: Cell):
 		else:
 			_remove_door(dir)
 
+func _update_visuals():
+	player.visible = current_cell.has_player()
+	chest.visible = current_cell.has_chest()
+	open_chest.visible = current_cell.has_open_chest()
+	var enemy_count = current_cell.get_enemy_count()
+	for i in enemies.get_child_count():
+		enemies.get_child(i).visible = i < enemy_count
+	
 func _remove_door(dir: Vector2):
 	var tile_pos = tile_position[dir]
 	var atlas = wall_tile_coord[dir]

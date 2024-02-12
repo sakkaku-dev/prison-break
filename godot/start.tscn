@@ -193,6 +193,7 @@ theme_override_constants/separation = 20
 custom_minimum_size = Vector2(50, 100)
 layout_mode = 2
 script = ExtResource("9_4gri8")
+door_direction = Vector2(-1, 0)
 
 [node name="ColorRect3" type="ColorRect" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/ColorRect"]
 custom_minimum_size = Vector2(50, 100)
@@ -211,6 +212,8 @@ theme_override_constants/separation = 20
 [node name="ColorRect3" type="TextureButton" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/VBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+script = ExtResource("9_4gri8")
+door_direction = Vector2(0, -1)
 
 [node name="ColorRect5" type="ColorRect" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/VBoxContainer/ColorRect3"]
 custom_minimum_size = Vector2(50, 50)
@@ -224,6 +227,8 @@ grow_vertical = 2
 [node name="ColorRect4" type="TextureButton" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/VBoxContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+script = ExtResource("9_4gri8")
+door_direction = Vector2(0, 1)
 
 [node name="ColorRect5" type="ColorRect" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/VBoxContainer/ColorRect4"]
 custom_minimum_size = Vector2(50, 50)
@@ -237,6 +242,7 @@ grow_vertical = 2
 [node name="ColorRect3" type="TextureButton" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3"]
 custom_minimum_size = Vector2(50, 100)
 layout_mode = 2
+script = ExtResource("9_4gri8")
 
 [node name="ColorRect3" type="ColorRect" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer3/ColorRect3"]
 custom_minimum_size = Vector2(50, 100)
