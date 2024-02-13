@@ -20,6 +20,8 @@ signal cell_clicked()
 @export var looted_icon: Control
 @export var looted_text: Label
 
+@export var door_inputs: DoorInputs
+
 @onready var door_positions = {
 	Vector2.DOWN: $BotDoor,
 	Vector2.RIGHT: $RightDoor,
@@ -37,6 +39,8 @@ func _ready():
 	update_entities()
 	for dir in door_positions.keys():
 		_position_door(dir)
+		
+	door_inputs.setup_for_doors(doors)
 
 func _position_door(dir: Vector2):
 	if not dir in doors: return
@@ -54,14 +58,16 @@ func get_door(dir: Vector2):
 	return null
 
 func _on_control_gui_input(event: InputEvent):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 		cell_clicked.emit()
 
 func unhighlight():
 	modulate = normal_color
+	door_inputs.close()
 	
 func highlight():
 	modulate = selected_color
+	door_inputs.open()
 
 func update_entities():
 	player_icon.visible = has_player()
