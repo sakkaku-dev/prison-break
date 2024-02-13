@@ -14,8 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://bj6ijxi37kqix" path="res://assets/Icon_OpenMedkit.png" id="10_suc1k"]
 [ext_resource type="Texture2D" uid="uid://bbmlmgxagmeln" path="res://assets/Icon_Ammo.png" id="10_ykcwn"]
 [ext_resource type="Texture2D" uid="uid://f7re1jgdsj11" path="res://assets/Icon_Health.png" id="12_07ap4"]
-[ext_resource type="Texture2D" uid="uid://bg81vi5fxroyl" path="res://icon.svg" id="15_66f7w"]
 [ext_resource type="Script" path="res://DoorInputs.gd" id="15_jw403"]
+[ext_resource type="Texture2D" uid="uid://c6ape0rve15ue" path="res://assets/Icon_DoorDir.png" id="16_k0udj"]
 
 [node name="Cell" type="Node2D" node_paths=PackedStringArray("player_icon", "enemy_icon", "enemy_icon_count", "chest_icon", "open_chest_icon", "medkit_icon", "open_medkit_icon", "exit_icon", "health_icon", "fight_icon", "looted_icon", "looted_text", "door_inputs")]
 script = ExtResource("1_58y0b")
@@ -241,7 +241,7 @@ theme_override_constants/margin_top = -80
 
 [node name="TextureRect" type="TextureRect" parent="Control/CenterContainer/DoorInputs/Top"]
 layout_mode = 2
-texture = ExtResource("15_66f7w")
+texture = ExtResource("16_k0udj")
 expand_mode = 4
 stretch_mode = 5
 
@@ -263,9 +263,10 @@ theme_override_constants/margin_bottom = -80
 
 [node name="TextureRect" type="TextureRect" parent="Control/CenterContainer/DoorInputs/Bot"]
 layout_mode = 2
-texture = ExtResource("15_66f7w")
+texture = ExtResource("16_k0udj")
 expand_mode = 4
 stretch_mode = 5
+flip_v = true
 
 [node name="Left" type="MarginContainer" parent="Control/CenterContainer/DoorInputs"]
 layout_mode = 1
@@ -280,12 +281,15 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = -120
+rotation = -1.5708
+pivot_offset = Vector2(20, 20)
+theme_override_constants/margin_top = -140
 
 [node name="TextureRect" type="TextureRect" parent="Control/CenterContainer/DoorInputs/Left"]
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-texture = ExtResource("15_66f7w")
-expand_mode = 2
+texture = ExtResource("16_k0udj")
+expand_mode = 4
 stretch_mode = 5
 
 [node name="Right" type="MarginContainer" parent="Control/CenterContainer/DoorInputs"]
@@ -301,12 +305,15 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_right = -120
+rotation = 1.5708
+pivot_offset = Vector2(20, 20)
+theme_override_constants/margin_top = -140
 
 [node name="TextureRect" type="TextureRect" parent="Control/CenterContainer/DoorInputs/Right"]
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-texture = ExtResource("15_66f7w")
-expand_mode = 2
+texture = ExtResource("16_k0udj")
+expand_mode = 4
 stretch_mode = 5
 
 [connection signal="gui_input" from="Control" to="." method="_on_control_gui_input"]
