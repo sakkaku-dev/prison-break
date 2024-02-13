@@ -7,6 +7,7 @@ signal played_turn()
 signal player_moved()
 signal reached_exit()
 signal player_died()
+signal changed_player_turn()
 
 signal medkit_pickedup()
 signal looted_chest()
@@ -15,6 +16,7 @@ signal killed_enemy()
 signal ammo_changed()
 signal health_changed()
 signal level_changed()
+
 
 const MAX_HEALTH = 3
 const MAX_AMMO = 10
@@ -47,6 +49,12 @@ var ammo := 0:
 		ammo = clamp(v, 0, MAX_AMMO)
 		ammo_changed.emit()
 		print("Ammo %s" % v)
+
+var is_player_turn = true:
+	set(v):
+		is_player_turn = v
+		if is_player_turn:
+			changed_player_turn.emit()
 
 var level := 0
 

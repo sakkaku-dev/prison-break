@@ -41,6 +41,11 @@ func _ready():
 		_position_door(dir)
 		
 	door_inputs.setup_for_doors(doors)
+	
+	GameManager.changed_player_turn.connect(func():
+		if modulate == selected_color:
+			door_inputs.open()
+	)
 
 func _position_door(dir: Vector2):
 	if not dir in doors: return
@@ -67,7 +72,8 @@ func unhighlight():
 	
 func highlight():
 	modulate = selected_color
-	door_inputs.open()
+	if GameManager.is_player_turn:
+		door_inputs.open()
 
 func update_entities():
 	player_icon.visible = has_player()

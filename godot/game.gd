@@ -6,7 +6,6 @@ extends Node2D
 var last_door := Vector2.ZERO
 
 var current_cell: Cell
-var player_turn = true
 
 func _ready():
 	GameManager.cell_clicked.connect(func(cell): current_cell = cell)
@@ -14,7 +13,7 @@ func _ready():
 		GameManager.clicked_cell(grid.get_first_room())
 		grid.update_entity_states()
 	)
-
+	
 	GameManager.reached_exit.connect(func(): get_tree().reload_current_scene())
 	GameManager.played_turn.connect(func(): _process_turn())
 	GameManager.player_moved.connect(func():
@@ -41,7 +40,7 @@ func _process_turn():
 	elif GameManager.is_player_at_exit():
 		GameManager.exit_level()
 	else:
-		var player_moved = _check_move_player()
+		_check_move_player()
 		_move_enemies()
 	
 	grid.update_entity_states()
@@ -49,7 +48,7 @@ func _process_turn():
 	if _needs_processing():
 		turn_timer.start()
 	else:
-		player_turn = true
+		GameManager.is_player_turn = true
 
 func _get_player_room():
 	return grid.get_room(GameManager.player_coord) as Cell
@@ -95,13 +94,13 @@ func _move_enemies():
 				print("Enemy %s room not found" % enemy)
 
 func _unhandled_input(event: InputEvent):
-	if player_turn and current_cell:
+	if GameManager.is_player_turn and current_cell:
 		var dir = _get_direction_for_input(event)
 		if dir:
 			var door = current_cell.get_door(dir)
 			if door:
 				door.toggle()
-				player_turn = false
+				GameManager.is_player_turn = false
 				
 				if current_cell.coord == GameManager.player_coord:
 					last_door = dir
