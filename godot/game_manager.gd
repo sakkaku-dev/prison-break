@@ -14,6 +14,7 @@ signal killed_enemy()
 
 signal ammo_changed()
 signal health_changed()
+signal level_changed()
 
 const MAX_HEALTH = 3
 const MAX_AMMO = 10
@@ -21,6 +22,8 @@ const GUN_DAMAGE = 2
 
 const ENEMY_HEALTH = 4
 const ENEMY_DAMAGE = 1
+
+const MAX_LEVEL = 5
 
 var exit_coord := Vector2.ZERO
 var player_coord := Vector2.ZERO
@@ -44,7 +47,7 @@ var ammo := 0:
 		ammo = clamp(v, 0, MAX_AMMO)
 		ammo_changed.emit()
 		print("Ammo %s" % v)
-	
+
 var level := 0
 
 func _ready():
@@ -52,6 +55,9 @@ func _ready():
 
 func is_first_level():
 	return GameManager.level == 0
+
+func get_current_floor():
+	return level - MAX_LEVEL
 
 func restart_game():
 	player_health = MAX_HEALTH

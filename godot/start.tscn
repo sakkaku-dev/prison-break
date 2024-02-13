@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://b5fpb0ljp0w15"]
+[gd_scene load_steps=14 format=3 uid="uid://b5fpb0ljp0w15"]
 
 [ext_resource type="PackedScene" uid="uid://bjfaq61k27s5m" path="res://game.tscn" id="1_3j2fh"]
 [ext_resource type="PackedScene" uid="uid://bqlvmaw4ak4kf" path="res://cell_view.tscn" id="2_t12wy"]
 [ext_resource type="Script" path="res://HpBar.gd" id="3_8xigv"]
 [ext_resource type="Texture2D" uid="uid://cup6ddvpeapbb" path="res://assets/UI_Heart.png" id="3_q3oet"]
 [ext_resource type="Texture2D" uid="uid://foyt5qn01xei" path="res://assets/UI_Gun.png" id="4_7kq6x"]
+[ext_resource type="Script" path="res://Floor.gd" id="4_bo5eq"]
 [ext_resource type="Script" path="res://GunBar.gd" id="4_hl47i"]
 [ext_resource type="Texture2D" uid="uid://cnrnunp6dgouw" path="res://assets/UI_NoGun.png" id="5_k3mpn"]
 [ext_resource type="Script" path="res://UIDoorButton.gd" id="9_4gri8"]
@@ -47,7 +48,7 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="HBoxContainer/CenterContainer/SubViewportContainer"]
 disable_3d = true
 handle_input_locally = false
-size = Vector2i(2, 2)
+size = Vector2i(1396, 1080)
 render_target_update_mode = 4
 
 [node name="Game" parent="HBoxContainer/CenterContainer/SubViewportContainer/SubViewport" instance=ExtResource("1_3j2fh")]
@@ -115,6 +116,11 @@ theme_override_constants/margin_bottom = 50
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2"]
 layout_mode = 2
 theme_override_constants/separation = 20
+
+[node name="Floor" type="Label" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+text = "__CURRENT_FLOOR__"
+script = ExtResource("4_bo5eq")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer" node_paths=PackedStringArray("progress_bar")]
 layout_mode = 2
