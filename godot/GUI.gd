@@ -1,10 +1,20 @@
-extends Control
+extends CanvasLayer
+
+@export var gameover: Control
+@export var escaped: Control
 
 func _ready():
-	hide()
+	gameover.hide()
+	escaped.hide()
+	
 	GameManager.player_died.connect(func():
 		get_tree().paused = true
-		show()
+		gameover.show()
+	)
+	
+	GameManager.player_escaped.connect(func():
+		get_tree().paused = true
+		escaped.show()
 	)
 
 

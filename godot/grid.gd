@@ -115,6 +115,8 @@ func _spawn_loot():
 	
 	var close_coords = [Vector2(1, 0), Vector2(0, 1), Vector2(1, 1)]
 	var available_coords = grid_data.keys().filter(func(c): return c != Vector2.ZERO and c != first_level_coord)
+	print(available_coords)
+	available_coords = available_coords.filter(func(c): return not _is_at_edge_of_grid(c))
 	
 	var first = null
 	for i in range(loot_count):
@@ -123,7 +125,7 @@ func _spawn_loot():
 		if i == 0 and GameManager.is_first_level():
 			coord = close_coords.pick_random()
 		else:
-			while first != null and first.distance_to(coord) <= 3:
+			while first != null and coord != null and first.distance_to(coord) <= floor(grid_size.x / 2.0):
 				available_coords.erase(coord)
 				coord = available_coords.pick_random()
 				#print("%s - %s = %s " % [first, coord, first.distance_to(coord)])
@@ -135,12 +137,17 @@ func _spawn_loot():
 		#print("Picked %s, removing from coords %s" % [coord, available_coords])
 		GameManager.add_loot(coord)
 
+func _is_at_edge_of_grid(coord: Vector2):
+	var x = coord.x == 0 or coord.y == 0 or coord.x == grid_size.x - 1 or coord.y == grid_size.y -1
+	print("%s - %s" % [coord, x])
+	return x
+
 func _spawn_medkit():
 	if GameManager.is_first_level(): return
 	
 	var medkit_count = 1
 	
-	var available_coords = grid_data.keys().filter(func(c): return c != Vector2.ZERO and c != first_level_coord and not c in GameManager.loot_coords)
+	var available_coords = grid_data.keys().filter(func(c): return c != Vector2.ZERO and c != first_level_coord and not c in GameManager.loot_coords and not _is_at_edge_of_grid(c))
 	for i in range(medkit_count):
 		var coord = available_coords.pick_random()
 		available_coords.erase(coord)

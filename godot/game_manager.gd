@@ -3,6 +3,7 @@ extends Node
 signal cell_clicked(cell)
 signal cell_view_ready()
 
+signal player_escaped()
 signal played_turn()
 signal player_moved()
 signal reached_exit()
@@ -25,7 +26,7 @@ const GUN_DAMAGE = 2
 const ENEMY_HEALTH = 4
 const ENEMY_DAMAGE = 1
 
-const MAX_LEVEL = 5
+const MAX_LEVEL = 3
 
 var exit_coord := Vector2.ZERO
 var player_coord := Vector2.ZERO
@@ -79,8 +80,12 @@ func move_player(dir: Vector2):
 
 func exit_level():
 	if is_player_at_exit():
-		reached_exit.emit()
 		level += 1
+		
+		if get_current_floor() >= 0:
+			player_escaped.emit()
+		else:
+			reached_exit.emit()
 
 func is_player_at_exit():
 	return player_coord == exit_coord

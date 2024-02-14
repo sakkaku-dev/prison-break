@@ -3,6 +3,12 @@ extends Node2D
 @onready var turn_timer = $TurnTimer
 @onready var grid = $Grid
 
+@onready var fight_sound = $FightSound
+@onready var heal_sound = $HealSound
+@onready var reload_sound = $ReloadSound
+@onready var door_open_sound = $DoorOpenSound
+@onready var door_close_sound = $DoorCloseSound
+
 var last_door := Vector2.ZERO
 
 var current_cell: Cell
@@ -12,6 +18,7 @@ func _ready():
 	GameManager.cell_view_ready.connect(func():
 		GameManager.clicked_cell(grid.get_first_room())
 		grid.update_entity_states()
+		GameManager.is_player_turn = true
 	)
 	
 	GameManager.reached_exit.connect(func(): get_tree().reload_current_scene())
@@ -25,12 +32,15 @@ func _ready():
 
 func _process_turn():
 	if GameManager.is_player_at_loot():
+		reload_sound.play()
 		GameManager.ammo += 10
 		await _get_player_room().picked_up_loot(10)
 	elif GameManager.is_player_at_medkit():
+		heal_sound.play()
 		GameManager.player_health += 2
 		await _get_player_room().pickup_medkit()
 	elif GameManager.is_player_fighting():
+		fight_sound.play()
 		await _get_player_room().fight()
 		
 		if GameManager.ammo <= 0:
@@ -62,14 +72,14 @@ func _check_move_player():
 	
 	var move_dir = cell.get_player_move_dir()
 	if move_dir:
-		_remove_moved_door_mark()
+		#_remove_moved_door_mark()
 		cell.move_player(move_dir)
 		return true
 	
 	if last_door:
 		var changed_door = cell.get_door(last_door)
 		if changed_door and changed_door.is_open:
-			_remove_moved_door_mark()
+			#_remove_moved_door_mark()
 			cell.move_player(last_door)
 			return true
 
@@ -99,6 +109,11 @@ func _unhandled_input(event: InputEvent):
 		if dir:
 			var door = current_cell.get_door(dir)
 			if door:
+				if door.is_open:
+					door_close_sound.play()
+				else:
+					door_open_sound.play()
+				
 				door.toggle()
 				GameManager.is_player_turn = false
 				

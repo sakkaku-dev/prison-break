@@ -148,7 +148,7 @@ func get_player_move_dir():
 	return Vector2.ZERO
 
 func move_player(move_dir: Vector2):
-	#doors[move_dir].move()
+	doors[move_dir].move()
 	GameManager.move_player(move_dir)
 
 func get_available_directions():
